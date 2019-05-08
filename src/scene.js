@@ -6,6 +6,7 @@ export default class Scene extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
+		this.canvasRef = React.createRef();
 	}
 
 	componentDidMount() {
@@ -20,12 +21,21 @@ export default class Scene extends React.Component {
 			// positionIterations: 20
 		});
 
+		let canvas = this.canvasRef.current;
+		canvas.width = window.innerWidth;
+		canvas = window.innerHeight;
+
+		window.addEventListener("resize", () => {
+			this.canvasRef.current.width = window.innerWidth;
+			this.canvasRef.current.height = window.innerHeight;
+		});
+
 		var render = Render.create({
-			element: this.refs.scene,
+			canvas: this.canvasRef.current,
 			engine: engine,
 			options: {
-				width: "100vw",
-				height: 600,
+				width: window.innerWidth,
+				height: window.innerHeight,
 				wireframes: false
 			}
 		});
@@ -66,6 +76,6 @@ export default class Scene extends React.Component {
 	}
 
 	render() {
-		return <div ref="scene" />;
+		return <canvas ref={this.canvasRef} />;
 	}
 }
