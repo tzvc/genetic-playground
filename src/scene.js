@@ -3,26 +3,21 @@ import React from "react";
 import Matter from "matter-js";
 
 // objects
-import createVehicle from "./vehicle";
+import Vehicle from "./vehicle";
 
 export default class Scene extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
 		this.canvasRef = React.createRef();
+		this.world = null;
 	}
 
 	componentDidMount() {
-		var Engine = Matter.Engine,
-			Render = Matter.Render,
-			World = Matter.World,
-			Bodies = Matter.Bodies,
-			Mouse = Matter.Mouse,
-			MouseConstraint = Matter.MouseConstraint;
-
-		var engine = Engine.create({
+		const engine = Matter.Engine.create({
 			// positionIterations: 20
 		});
+		this.world = engine.world;
 
 		let canvas = this.canvasRef.current;
 		canvas.width = window.innerWidth;
@@ -33,66 +28,103 @@ export default class Scene extends React.Component {
 			this.canvasRef.current.height = window.innerHeight;
 		});
 
-		var render = Render.create({
+		const render = Matter.Render.create({
 			canvas: this.canvasRef.current,
 			engine: engine,
 			options: {
 				width: window.innerWidth,
 				height: window.innerHeight,
 				wireframes: true,
-				showAngleIndicator: true
+				showAngleIndicator: true,
+				showCollisions: true,
+				showIds: true,
+				showDebug: true
 			}
 		});
 
-		const rightWall = Bodies.rectangle(
+		const rightWall = Matter.Bodies.rectangle(
 			window.innerWidth + 1,
 			window.innerHeight / 2,
 			2,
 			window.innerHeight,
-			{ isStatic: true }
+			{ isSensor: true, isStatic: true }
 		);
 
-		const leftWall = Bodies.rectangle(
+		const leftWall = Matter.Bodies.rectangle(
 			-1,
 			window.innerHeight / 2,
 			2,
 			window.innerHeight,
 			{
+				isSensor: true,
 				isStatic: true
 			}
 		);
-		const floor = Bodies.rectangle(
+		const floor = Matter.Bodies.rectangle(
 			window.innerWidth / 2,
 			window.innerHeight / 1.4,
 			window.innerWidth,
 			50,
 			{ isStatic: true }
 		);
+		const floorSensor = Matter.Bodies.rectangle(
+			window.innerWidth / 2,
+			window.innerHeight / 1.4,
+			window.innerWidth,
+			50,
+			{ isSensor: true, isStatic: true }
+		);
 
-		const car = createVehicle(
+		const vehicle = new Vehicle(
 			window.innerWidth / 2,
 			window.innerHeight / 2 - 25,
 			300,
 			160
 		);
 
-		World.add(engine.world, [
+		Matter.Events.on(engine, "collisionStart", event => {
+			var pairs = event.pairs;
+			console.log(event);
+			for (var i = 0, j = pairs.length; i != j; ++i) {
+				var pair = pairs[i];
+
+				console.log(pair);
+				if (
+					pair.bodyA.id === vehicle.collidableBodyId ||
+					pair.bodyB.id === vehicle.collidableBodyId
+				) {
+					console.log("car collided");
+					Matter.World.remove(this.world, vehicle.composite);
+					console.log("car removed");
+				}
+			}
+			// 			for (var i = 0, j = pairs.length; i != j; ++i) {
+			// 				var pair = pairs[i];
+			// 				conso
+			// // con
+			// 				// ir.bodyA.render.strokeStyle = redColor;
+			// 				}
+			// 			}
+		});
+
+		Matter.World.add(engine.world, [
 			floor,
+			floorSensor,
 			leftWall,
 			rightWall,
-			// Bodies.rectangle(400, 600, 800, 50.5, { isStatic: true }),
-			// Bodies.rectangle(400, 535, 20, 80, {
+			// Matter.Bodies.rectangle(400, 600, 800, 50.5, { isStatic: true }),
+			// Matter.Bodies.rectangle(400, 535, 20, 80, {
 			// 	isStatic: true,
 			// 	collisionFilter: { group: group }
 			// }),
-			car
+			vehicle.composite
 		]);
 
 		//World.add(engine.world, [ballA, ballB]);
 
 		// add mouse control
-		var mouse = Mouse.create(render.canvas),
-			mouseConstraint = MouseConstraint.create(engine, {
+		var mouse = Matter.Mouse.create(render.canvas),
+			mouseConstraint = Matter.MouseConstraint.create(engine, {
 				mouse: mouse,
 				constraint: {
 					stiffness: 0.2,
@@ -102,15 +134,24 @@ export default class Scene extends React.Component {
 				}
 			});
 
-		World.add(engine.world, mouseConstraint);
+		Matter.World.add(engine.world, mouseConstraint);
 
-		Matter.Events.on(mouseConstraint, "mousedown", function(event) {
-			World.add(engine.world, Bodies.circle(150, 50, 30, { restitution: 0.7 }));
-		});
+		// Matter.Events.on(mouseConstraint, "mousedown", function(event) {
+		// 	console.log(event);
+		// 	World.add(
+		// 		engine.world,
+		// 		createVehicle(
+		// 			event.mouse.mousedownPosition.x,
+		// 			event.mouse.mousedownPosition.x,
+		// 			300,
+		// 			160
+		// 		)
+		// 	);
+		// });
 
-		Engine.run(engine);
+		Matter.Engine.run(engine);
 
-		Render.run(render);
+		Matter.Render.run(render);
 	}
 
 	render() {
