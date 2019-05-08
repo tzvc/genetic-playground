@@ -2,6 +2,9 @@ import React from "react";
 
 import Matter from "matter-js";
 
+// objects
+import createVehicle from "./vehicle";
+
 export default class Scene extends React.Component {
 	constructor(props) {
 		super(props);
@@ -23,7 +26,7 @@ export default class Scene extends React.Component {
 
 		let canvas = this.canvasRef.current;
 		canvas.width = window.innerWidth;
-		canvas = window.innerHeight;
+		canvas.height = window.innerHeight;
 
 		window.addEventListener("resize", () => {
 			this.canvasRef.current.width = window.innerWidth;
@@ -36,21 +39,55 @@ export default class Scene extends React.Component {
 			options: {
 				width: window.innerWidth,
 				height: window.innerHeight,
-				wireframes: false
+				wireframes: true
 			}
 		});
 
-		var ballA = Bodies.circle(210, 100, 30, { restitution: 0.5 });
-		var ballB = Bodies.circle(110, 50, 30, { restitution: 0.5 });
+		const rightWall = Bodies.rectangle(
+			window.innerWidth + 1,
+			window.innerHeight / 2,
+			2,
+			window.innerHeight,
+			{ isStatic: true }
+		);
+
+		const leftWall = Bodies.rectangle(
+			-1,
+			window.innerHeight / 2,
+			2,
+			window.innerHeight,
+			{
+				isStatic: true
+			}
+		);
+		const floor = Bodies.rectangle(
+			window.innerWidth / 2,
+			window.innerHeight / 1.4,
+			window.innerWidth,
+			50,
+			{ isStatic: true }
+		);
+
+		const car = createVehicle(
+			window.innerWidth / 2,
+			window.innerHeight / 2 - 25,
+			300,
+			160
+		);
+
 		World.add(engine.world, [
-			// walls
-			Bodies.rectangle(200, 0, 600, 50, { isStatic: true }),
-			Bodies.rectangle(200, 600, 600, 50, { isStatic: true }),
-			Bodies.rectangle(260, 300, 50, 600, { isStatic: true }),
-			Bodies.rectangle(0, 300, 50, 600, { isStatic: true })
+			floor,
+			leftWall,
+			rightWall,
+			// Bodies.rectangle(400, 600, 800, 50.5, { isStatic: true }),
+			// Bodies.rectangle(400, 535, 20, 80, {
+			// 	isStatic: true,
+			// 	collisionFilter: { group: group }
+			// }),
+			car
 		]);
 
-		World.add(engine.world, [ballA, ballB]);
+		//World.add(engine.world, [ballA, ballB]);
 
 		// add mouse control
 		var mouse = Mouse.create(render.canvas),
