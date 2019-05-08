@@ -1,29 +1,53 @@
-import { Composite, Bodies } from "matter-js";
+import { Composite, Bodies, Body } from "matter-js";
 
-const createScene = (width, height) => {
-	const rightWall = Bodies.rectangle(width + 1, height / 2, 2, height, {
-		isSensor: true,
-		isStatic: true
-	});
+export default class Scene {
+	constructor(width, height) {
+		this.width = width;
+		this.height = height;
+		const rightWall = Bodies.rectangle(width + 1, height / 2, 2, height, {
+			isSensor: true,
+			isStatic: true
+		});
+		const leftWall = Bodies.rectangle(-1, height / 2, 2, height, {
+			isSensor: true,
+			isStatic: true
+		});
+		const bottomWall = Bodies.rectangle(width / 2, height, width, 2, {
+			isSensor: true,
+			isStatic: true
+		});
+		rightWall.render.visible = false;
+		leftWall.render.visible = false;
+		bottomWall.render.visible = false;
 
-	const leftWall = Bodies.rectangle(-1, height / 2, 2, height, {
-		isSensor: true,
-		isStatic: true
-	});
-	const floor = Bodies.rectangle(width / 2, height / 1.4, width, 50, {
-		isStatic: true
-	});
-	const floorSensor = Bodies.rectangle(width / 2, height / 1.4, width, 50, {
-		isSensor: true,
-		isStatic: true
-	});
+		this.floor = Composite.create({ label: "floor" });
+		Composite.addBody(
+			this.floor,
+			Bodies.polygon(width / 2, height * 1.5, 10, width / 2, {
+				isStatic: true,
+				chamfer: { radius: 100 }
+			})
+		);
 
-	const sceneComposite = Composite.create({ label: "scene" });
-	Composite.addBody(sceneComposite, leftWall);
-	Composite.addBody(sceneComposite, rightWall);
-	Composite.addBody(sceneComposite, floor);
-	Composite.addBody(sceneComposite, floorSensor);
-	return sceneComposite;
-};
+		Composite.rotate(this.floor, 0.1, {
+			x: width / 2,
+			y: height * 1.2
+		});
 
-export default createScene;
+		this.angle = 0.0;
+
+		this.composite = Composite.create({ label: "scene" });
+		Composite.addBody(this.composite, leftWall);
+		Composite.addBody(this.composite, rightWall);
+		Composite.addBody(this.composite, bottomWall);
+
+		Composite.addComposite(this.composite, this.floor);
+	}
+
+	rotateRandomly() {
+		Composite.rotate(this.floor, Math.random() / 30, {
+			x: this.width / 2,
+			y: this.height * 1.5
+		});
+	}
+}
