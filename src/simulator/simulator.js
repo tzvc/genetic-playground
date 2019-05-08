@@ -4,8 +4,9 @@ import Matter from "matter-js";
 
 // objects
 import Vehicle from "./vehicle";
+import createScene from "./scene";
 
-export default class Scene extends React.Component {
+export default class Simulator extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {};
@@ -42,38 +43,7 @@ export default class Scene extends React.Component {
 			}
 		});
 
-		const rightWall = Matter.Bodies.rectangle(
-			window.innerWidth + 1,
-			window.innerHeight / 2,
-			2,
-			window.innerHeight,
-			{ isSensor: true, isStatic: true }
-		);
-
-		const leftWall = Matter.Bodies.rectangle(
-			-1,
-			window.innerHeight / 2,
-			2,
-			window.innerHeight,
-			{
-				isSensor: true,
-				isStatic: true
-			}
-		);
-		const floor = Matter.Bodies.rectangle(
-			window.innerWidth / 2,
-			window.innerHeight / 1.4,
-			window.innerWidth,
-			50,
-			{ isStatic: true }
-		);
-		const floorSensor = Matter.Bodies.rectangle(
-			window.innerWidth / 2,
-			window.innerHeight / 1.4,
-			window.innerWidth,
-			50,
-			{ isSensor: true, isStatic: true }
-		);
+		const scene = createScene(window.innerWidth, window.innerHeight);
 
 		const vehicle = new Vehicle(
 			window.innerWidth / 2,
@@ -83,42 +53,17 @@ export default class Scene extends React.Component {
 		);
 
 		Matter.Events.on(engine, "collisionStart", event => {
-			var pairs = event.pairs;
-			console.log(event);
-			for (var i = 0, j = pairs.length; i != j; ++i) {
-				var pair = pairs[i];
-
-				console.log(pair);
+			event.pairs.forEach(pair => {
 				if (
 					pair.bodyA.id === vehicle.collidableBodyId ||
 					pair.bodyB.id === vehicle.collidableBodyId
 				) {
-					console.log("car collided");
 					Matter.World.remove(this.world, vehicle.composite);
-					console.log("car removed");
 				}
-			}
-			// 			for (var i = 0, j = pairs.length; i != j; ++i) {
-			// 				var pair = pairs[i];
-			// 				conso
-			// // con
-			// 				// ir.bodyA.render.strokeStyle = redColor;
-			// 				}
-			// 			}
+			});
 		});
 
-		Matter.World.add(engine.world, [
-			floor,
-			floorSensor,
-			leftWall,
-			rightWall,
-			// Matter.Bodies.rectangle(400, 600, 800, 50.5, { isStatic: true }),
-			// Matter.Bodies.rectangle(400, 535, 20, 80, {
-			// 	isStatic: true,
-			// 	collisionFilter: { group: group }
-			// }),
-			vehicle.composite
-		]);
+		Matter.World.add(engine.world, [scene, vehicle.composite]);
 
 		//World.add(engine.world, [ballA, ballB]);
 

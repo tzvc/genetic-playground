@@ -1,5 +1,4 @@
 import { Body, Bodies, Composite, Constraint } from "matter-js";
-import { tsConstructorType } from "@babel/types";
 
 /**
  * Creates a composite with simple vehicle setup of bodies and constraints.

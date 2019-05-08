@@ -1,9 +1,9 @@
 import React from "react";
 
-import Scene from "./scene";
+import Simulator from "./simulator/simulator";
 
 function App() {
-	return <Scene />;
+	return <Simulator />;
 }
 
 export default App;
