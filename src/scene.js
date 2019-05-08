@@ -39,7 +39,8 @@ export default class Scene extends React.Component {
 			options: {
 				width: window.innerWidth,
 				height: window.innerHeight,
-				wireframes: true
+				wireframes: true,
+				showAngleIndicator: true
 			}
 		});
 
