@@ -34,7 +34,7 @@ export default class vehicle {
 			}
 		);
 
-		const wheelA = Bodies.circle(
+		this.wheel = Bodies.circle(
 			xx + wheelXOffset,
 			yy + wheelYOffset,
 			width / wheelToBodyRatio,
@@ -50,15 +50,19 @@ export default class vehicle {
 		const axelA = Constraint.create({
 			bodyB: body,
 			pointB: { x: wheelXOffset, y: wheelYOffset },
-			bodyA: wheelA,
+			bodyA: this.wheel,
 			stiffness: 1,
 			length: 0
 		});
 
 		this.composite = Composite.create({ label: "vehicle" });
 		Composite.addBody(this.composite, body);
-		Composite.addBody(this.composite, wheelA);
+		Composite.addBody(this.composite, this.wheel);
 		Composite.addConstraint(this.composite, axelA);
 		this.collidableBodyId = body.id;
+	}
+
+	setWheelAngularVelocity(angularVelocity) {
+		Body.setAngularVelocity(this.wheel, angularVelocity);
 	}
 }
