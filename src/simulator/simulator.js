@@ -13,7 +13,7 @@ import PIDController from "./pid_controller";
 
 // objects
 import Vehicle from "./vehicle";
-import createScene from "./scene";
+import Scene from "./scene";
 
 export default class Simulator extends React.Component {
 	constructor(props) {
@@ -52,35 +52,75 @@ export default class Simulator extends React.Component {
 			}
 		});
 
-		const scene = createScene(window.innerWidth, window.innerHeight);
+		const scene = new Scene(window.innerWidth, window.innerHeight);
 
-		const vehicle = new Vehicle(
-			window.innerWidth / 2,
-			window.innerHeight / 2 - 25,
-			300,
-			160
-		);
-		const pid_controller = new PIDController(0.7, 0.05, 1, 1);
-		pid_controller.setTarget(0);
+		let population = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(i => {
+			const controller = new PIDController(
+				Math.random(),
+				Math.random(),
+				Math.random(),
+				1
+			);
+			controller.setTarget(0);
+			return {
+				vehicle: new Vehicle(
+					window.innerWidth / 2,
+					window.innerHeight / 2 - 25,
+					300,
+					160
+				),
+				controller: controller
+			};
+		});
 
 		Events.on(engine, "collisionStart", event => {
 			event.pairs.forEach(pair => {
-				if (
-					pair.bodyA.id === vehicle.collidableBodyId ||
-					pair.bodyB.id === vehicle.collidableBodyId
-				) {
-					World.remove(this.world, vehicle.composite);
-				}
+				population.forEach((item, index, object) => {
+					if (
+						pair.bodyA.id === item.vehicle.collidableBodyId ||
+						pair.bodyB.id === item.vehicle.collidableBodyId
+					) {
+						const ctr = item.controller;
+						World.remove(this.world, item.vehicle.composite);
+						object.splice(index, 1);
+						console.log(ctr.k_p, ctr.k_i, ctr.k_d);
+						const controller = new PIDController(
+							Math.random(),
+							Math.random(),
+							Math.random(),
+							1
+						);
+						controller.setTarget(0);
+						const nn = {
+							vehicle: new Vehicle(
+								window.innerWidth / 2,
+								window.innerHeight / 2 - 25,
+								300,
+								160
+							),
+							controller: controller
+						};
+						population.push(nn);
+						World.add(this.world, [nn.vehicle.composite]);
+						console.log(population);
+					}
+				});
 			});
 		});
 
 		Events.on(engine, "beforeUpdate", event => {
-			vehicle.setWheelAngularVelocity(
-				pid_controller.update(vehicle.getBodyAngle())
+			scene.rotateRandomly();
+			population.forEach(pop =>
+				pop.vehicle.setWheelAngularVelocity(
+					pop.controller.update(pop.vehicle.getBodyAngle())
+				)
 			);
 		});
 
-		World.add(engine.world, [scene, vehicle.composite]);
+		World.add(engine.world, [
+			scene.composite,
+			...population.map(pop => pop.vehicle.composite)
+		]);
 
 		//World.add(engine.world, [ballA, ballB]);
 
