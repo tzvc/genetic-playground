@@ -9,6 +9,8 @@ import {
 	Render
 } from "matter-js";
 
+import PIDController from "./pid_controller";
+
 // objects
 import Vehicle from "./vehicle";
 import createScene from "./scene";
@@ -58,6 +60,8 @@ export default class Simulator extends React.Component {
 			300,
 			160
 		);
+		const pid_controller = new PIDController(0.7, 0.05, 1, 1);
+		pid_controller.setTarget(0);
 
 		Events.on(engine, "collisionStart", event => {
 			event.pairs.forEach(pair => {
@@ -71,7 +75,9 @@ export default class Simulator extends React.Component {
 		});
 
 		Events.on(engine, "beforeUpdate", event => {
-			vehicle.setWheelAngularVelocity(0.02);
+			vehicle.setWheelAngularVelocity(
+				pid_controller.update(vehicle.getBodyAngle())
+			);
 		});
 
 		World.add(engine.world, [scene, vehicle.composite]);

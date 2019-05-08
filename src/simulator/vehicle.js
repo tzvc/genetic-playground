@@ -17,7 +17,7 @@ export default class vehicle {
 			wheelXOffset = 0,
 			wheelYOffset = height / 2;
 
-		const body = Bodies.rectangle(
+		this.body = Bodies.rectangle(
 			xx,
 			yy - width / wheelToBodyRatio,
 			width,
@@ -48,7 +48,7 @@ export default class vehicle {
 		);
 
 		const axelA = Constraint.create({
-			bodyB: body,
+			bodyB: this.body,
 			pointB: { x: wheelXOffset, y: wheelYOffset },
 			bodyA: this.wheel,
 			stiffness: 1,
@@ -56,13 +56,18 @@ export default class vehicle {
 		});
 
 		this.composite = Composite.create({ label: "vehicle" });
-		Composite.addBody(this.composite, body);
+		Composite.addBody(this.composite, this.body);
 		Composite.addBody(this.composite, this.wheel);
 		Composite.addConstraint(this.composite, axelA);
-		this.collidableBodyId = body.id;
+		this.collidableBodyId = this.body.id;
 	}
 
-	setWheelAngularVelocity(angularVelocity) {
-		Body.setAngularVelocity(this.wheel, angularVelocity);
+	setWheelAngularVelocity(correctionFactor) {
+		console.log(correctionFactor);
+		Body.setAngularVelocity(this.wheel, -correctionFactor);
+	}
+
+	getBodyAngle() {
+		return this.body.angle;
 	}
 }
