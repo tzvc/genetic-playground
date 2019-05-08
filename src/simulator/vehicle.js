@@ -13,9 +13,8 @@ import { Body, Bodies, Composite, Constraint } from "matter-js";
 export default class vehicle {
 	constructor(xx, yy, height, width) {
 		const wheelToBodyRatio = 2.3;
-		const group = Body.nextGroup(true),
-			wheelXOffset = 0,
-			wheelYOffset = height / 2;
+		const wheelXOffset = 0;
+		const wheelYOffset = height / 2;
 
 		this.body = Bodies.rectangle(
 			xx,
@@ -24,7 +23,7 @@ export default class vehicle {
 			height,
 			{
 				collisionFilter: {
-					group: group
+					group: -1
 				},
 				chamfer: {
 					radius: 10
@@ -40,7 +39,7 @@ export default class vehicle {
 			width / wheelToBodyRatio,
 			{
 				collisionFilter: {
-					group: group
+					group: -1
 				},
 				friction: 0.8,
 				label: "vehicle_wheel"
@@ -55,7 +54,9 @@ export default class vehicle {
 			length: 0
 		});
 
-		this.composite = Composite.create({ label: "vehicle" });
+		this.composite = Composite.create({
+			label: "vehicle"
+		});
 		Composite.addBody(this.composite, this.body);
 		Composite.addBody(this.composite, this.wheel);
 		Composite.addConstraint(this.composite, axelA);
