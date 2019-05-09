@@ -22,24 +22,10 @@ export default class Scene {
 		});
 		rightWall.render.visible = false;
 		leftWall.render.visible = false;
-
+		topWall.render.visible = false;
 		bottomWall.render.visible = false;
 
 		this.floor = Composite.create({ label: "floor" });
-		Composite.addBody(
-			this.floor,
-			Bodies.polygon(width / 2, height * 2, 5, width, {
-				isStatic: true,
-				chamfer: { radius: 100 }
-			})
-		);
-		Composite.addBody(
-			this.floor,
-			Bodies.polygon(width / 2, height * 2, 4, width, {
-				isStatic: true,
-				chamfer: { radius: 100 }
-			})
-		);
 		Composite.addBody(
 			this.floor,
 			Bodies.polygon(width / 2, height * 2, 6, width, {
@@ -49,7 +35,21 @@ export default class Scene {
 		);
 		Composite.addBody(
 			this.floor,
-			Bodies.polygon(width / 2, height * 2, 5, width, {
+			Bodies.polygon(width / 2, height * 2, 7, width, {
+				isStatic: true,
+				chamfer: { radius: 100 }
+			})
+		);
+		Composite.addBody(
+			this.floor,
+			Bodies.polygon(width / 2, height * 2, 8, width, {
+				isStatic: true,
+				chamfer: { radius: 100 }
+			})
+		);
+		Composite.addBody(
+			this.floor,
+			Bodies.polygon(width / 2, height * 2, 9, width, {
 				isStatic: true,
 				chamfer: { radius: 100 }
 			})
