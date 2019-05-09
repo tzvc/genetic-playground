@@ -6,7 +6,8 @@ import {
 	World,
 	Mouse,
 	MouseConstraint,
-	Render
+	Render,
+	Composite
 } from "matter-js";
 
 import PIDController from "./pid_controller";
@@ -54,7 +55,7 @@ export default class Simulator extends React.Component {
 
 		const scene = new Scene(window.innerWidth, window.innerHeight);
 
-		let population = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(i => {
+		let population = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(i => {
 			const controller = new PIDController(
 				Math.random(),
 				Math.random(),
@@ -81,8 +82,9 @@ export default class Simulator extends React.Component {
 						pair.bodyB.id === item.vehicle.collidableBodyId
 					) {
 						const ctr = item.controller;
-						World.remove(this.world, item.vehicle.composite);
+						Composite.remove(this.world, item.vehicle.composite);
 						object.splice(index, 1);
+						console.log(this.world);
 						console.log(ctr.k_p, ctr.k_i, ctr.k_d);
 						const controller = new PIDController(
 							Math.random(),
@@ -102,7 +104,7 @@ export default class Simulator extends React.Component {
 						};
 						population.push(nn);
 						World.add(this.world, [nn.vehicle.composite]);
-						console.log(population);
+						console.log(this.world);
 					}
 				});
 			});

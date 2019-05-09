@@ -64,7 +64,7 @@ export default class vehicle {
 	}
 
 	setWheelAngularVelocity(correctionFactor) {
-		console.log(correctionFactor);
+		//console.log(correctionFactor);
 		Body.setAngularVelocity(this.wheel, -correctionFactor);
 	}
 
