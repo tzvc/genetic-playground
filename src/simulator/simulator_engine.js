@@ -7,19 +7,19 @@ import Scene from "./scene";
 
 export default class SimulatorEngine {
 	constructor() {
-		this.vehicules = [];
+		this.vehicles = [];
 		this.engine = Engine.create({
 			// positionIterations: 20
 		});
 
 		Events.on(this.engine, "collisionStart", event => {
 			event.pairs.forEach(pair => {
-				this.vehicules.forEach((item, index, object) => {
+				this.vehicles.forEach((item, index, object) => {
 					if (
 						pair.bodyA.id === item.vehicle.collidableBodyId ||
 						pair.bodyB.id === item.vehicle.collidableBodyId
 					) {
-						Composite.remove(this.engine.world, item.vehicle.composite);
+						item.resolver(Date.now());
 						object.splice(index, 1);
 					}
 				});
@@ -28,7 +28,7 @@ export default class SimulatorEngine {
 
 		Events.on(this.engine, "beforeUpdate", event => {
 			scene.rotateRandomly();
-			this.vehicules.forEach(pop =>
+			this.vehicles.forEach(pop =>
 				pop.vehicle.setWheelAngularVelocity(
 					pop.controller.update(pop.vehicle.getBodyAngle())
 				)
@@ -41,8 +41,13 @@ export default class SimulatorEngine {
 		Engine.run(this.engine);
 	}
 
-	runSimulation(p, i, d) {
-		const vehicule = new Vehicle(
+	removeVehicule(vehicle) {
+		// remove vehicle from simulation
+		Composite.remove(this.engine.world, vehicle.composite);
+	}
+
+	async runSimulation(p, i, d) {
+		const vehicle = new Vehicle(
 			window.innerWidth / 2,
 			window.innerHeight / 2 - 25,
 			300,
@@ -50,10 +55,25 @@ export default class SimulatorEngine {
 		);
 		const controller = new PIDController(p, i, d, 1);
 		controller.setTarget(0);
-		this.vehicules.push({
-			vehicle: vehicule,
-			controller: controller
+		let promiseResolver;
+		var resPromise = new Promise(function(resolve, reject) {
+			promiseResolver = resolve;
 		});
-		World.add(this.engine.world, [vehicule.composite]);
+
+		this.vehicles.push({
+			vehicle: vehicle,
+			controller: controller,
+			resolver: promiseResolver
+		});
+
+		const startTime = Date.now();
+		World.add(this.engine.world, [vehicle.composite]);
+		setTimeout(() => promiseResolver(Date.now()), 10000);
+		const endTime = await resPromise;
+		Composite.remove(this.engine.world, vehicle.composite);
+		this.vehicles = this.vehicles.filter(function(item) {
+			return item !== vehicle;
+		});
+		return endTime - startTime;
 	}
 }
