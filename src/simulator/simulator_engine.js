@@ -1,59 +1,15 @@
-import React from "react";
-
-import {
-	Engine,
-	Events,
-	World,
-	Mouse,
-	MouseConstraint,
-	Render,
-	Composite
-} from "matter-js";
-
+import { Engine, Events, World, Composite } from "matter-js";
 import PIDController from "./pid_controller";
 
 // objects
 import Vehicle from "./vehicle";
 import Scene from "./scene";
 
-export default class Simulator extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {};
-		this.canvasRef = React.createRef();
-		this.world = null;
-	}
-
-	componentDidMount() {
-		const engine = Engine.create({
+export default class SimulatorEngine {
+	constructor() {
+		this.engine = Engine.create({
 			// positionIterations: 20
 		});
-		this.world = engine.world;
-
-		let canvas = this.canvasRef.current;
-		canvas.width = window.innerWidth;
-		canvas.height = window.innerHeight;
-
-		window.addEventListener("resize", () => {
-			this.canvasRef.current.width = window.innerWidth;
-			this.canvasRef.current.height = window.innerHeight;
-		});
-
-		const render = Render.create({
-			canvas: this.canvasRef.current,
-			engine: engine,
-			options: {
-				width: window.innerWidth,
-				height: window.innerHeight,
-				wireframes: true,
-				showAngleIndicator: true,
-				showCollisions: true,
-				showIds: true,
-				showDebug: true
-			}
-		});
-
-		const scene = new Scene(window.innerWidth, window.innerHeight);
 
 		let population = [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1].map(i => {
 			const controller = new PIDController(
@@ -73,8 +29,11 @@ export default class Simulator extends React.Component {
 				controller: controller
 			};
 		});
+		World.add(this.engine.world, [
+			...population.map(pop => pop.vehicle.composite)
+		]);
 
-		Events.on(engine, "collisionStart", event => {
+		Events.on(this.engine, "collisionStart", event => {
 			event.pairs.forEach(pair => {
 				population.forEach((item, index, object) => {
 					if (
@@ -110,7 +69,7 @@ export default class Simulator extends React.Component {
 			});
 		});
 
-		Events.on(engine, "beforeUpdate", event => {
+		Events.on(this.engine, "beforeUpdate", event => {
 			scene.rotateRandomly();
 			population.forEach(pop =>
 				pop.vehicle.setWheelAngularVelocity(
@@ -119,31 +78,9 @@ export default class Simulator extends React.Component {
 			);
 		});
 
-		World.add(engine.world, [
-			scene.composite,
-			...population.map(pop => pop.vehicle.composite)
-		]);
+		const scene = new Scene(window.innerWidth, window.innerHeight);
+		World.add(this.engine.world, [scene.composite]);
 
-		// add mouse control
-		var mouse = Mouse.create(render.canvas),
-			mouseConstraint = MouseConstraint.create(engine, {
-				mouse: mouse,
-				constraint: {
-					stiffness: 0.2,
-					render: {
-						visible: false
-					}
-				}
-			});
-
-		World.add(engine.world, mouseConstraint);
-
-		Engine.run(engine);
-
-		Render.run(render);
-	}
-
-	render() {
-		return <canvas ref={this.canvasRef} />;
+		Engine.run(this.engine);
 	}
 }
