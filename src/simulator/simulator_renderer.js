@@ -39,19 +39,19 @@ export default class SimulatorRenderer extends React.Component {
 				showDebug: true
 			}
 		});
-		// // add mouse control
-		// var mouse = Mouse.create(render.canvas),
-		// 	mouseConstraint = MouseConstraint.create(this.props.engine, {
-		// 		mouse: mouse,
-		// 		constraint: {
-		// 			stiffness: 0.2,
-		// 			render: {
-		// 				visible: false
-		// 			}
-		// 		}
-		// 	});
+		// add mouse control
+		var mouse = Mouse.create(render.canvas),
+			mouseConstraint = MouseConstraint.create(this.props.engine, {
+				mouse: mouse,
+				constraint: {
+					stiffness: 0.2,
+					render: {
+						visible: false
+					}
+				}
+			});
 
-		// World.add(this.props.engine.world, mouseConstraint);
+		World.add(this.props.engine.world, mouseConstraint);
 		Render.run(render);
 	}
 
