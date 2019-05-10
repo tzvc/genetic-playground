@@ -48,3 +48,5 @@ genetic.fitness = entity => {};
 genetic.generation = (pop, generation, stats) => {};
 
 genetic.notification = (pop, generation, stats, isFinished) => {};
+
+export default genetic;
