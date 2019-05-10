@@ -7,7 +7,6 @@ import { Body, Bodies, Composite, Constraint } from "matter-js";
  * @param {number} yy
  * @param {number} width
  * @param {number} height
- * @param {number} wheelSize
  * @return {composite} A new composite vehicle body
  */
 export default class vehicle {
@@ -64,7 +63,6 @@ export default class vehicle {
 	}
 
 	setWheelAngularVelocity(correctionFactor) {
-		//console.log(correctionFactor);
 		Body.setAngularVelocity(this.wheel, -correctionFactor);
 	}
 

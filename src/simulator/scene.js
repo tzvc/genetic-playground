@@ -1,4 +1,4 @@
-import { Composite, Bodies, Body } from "matter-js";
+import { Composite, Bodies } from "matter-js";
 
 export default class Scene {
 	constructor(width, height) {
