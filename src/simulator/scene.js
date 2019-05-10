@@ -26,32 +26,26 @@ export default class Scene {
 		bottomWall.render.visible = false;
 
 		this.floor = Composite.create({ label: "floor" });
+
 		Composite.addBody(
 			this.floor,
-			Bodies.polygon(width / 2, height * 2, 6, width, {
+			Bodies.polygon(width / 2, height * 1.7, 5, height, {
 				isStatic: true,
-				chamfer: { radius: 100 }
+				chamfer: { radius: 50 }
 			})
 		);
 		Composite.addBody(
 			this.floor,
-			Bodies.polygon(width / 2, height * 2, 7, width, {
+			Bodies.polygon(width / 2, height * 1.7, 6, height, {
 				isStatic: true,
-				chamfer: { radius: 100 }
+				chamfer: { radius: 50 }
 			})
 		);
 		Composite.addBody(
 			this.floor,
-			Bodies.polygon(width / 2, height * 2, 8, width, {
+			Bodies.polygon(width / 2, height * 1.7, 3, height, {
 				isStatic: true,
-				chamfer: { radius: 100 }
-			})
-		);
-		Composite.addBody(
-			this.floor,
-			Bodies.polygon(width / 2, height * 2, 9, width, {
-				isStatic: true,
-				chamfer: { radius: 100 }
+				chamfer: { radius: 50 }
 			})
 		);
 
@@ -69,7 +63,7 @@ export default class Scene {
 	rotateRandomly() {
 		Composite.rotate(this.floor, Math.random() / 100, {
 			x: this.width / 2,
-			y: this.height * 2
+			y: this.height * 1.7
 		});
 	}
 }
