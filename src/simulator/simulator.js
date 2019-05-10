@@ -124,8 +124,6 @@ export default class Simulator extends React.Component {
 			...population.map(pop => pop.vehicle.composite)
 		]);
 
-		//World.add(engine.world, [ballA, ballB]);
-
 		// add mouse control
 		var mouse = Mouse.create(render.canvas),
 			mouseConstraint = MouseConstraint.create(engine, {
@@ -139,19 +137,6 @@ export default class Simulator extends React.Component {
 			});
 
 		World.add(engine.world, mouseConstraint);
-
-		// Events.on(mouseConstraint, "mousedown", function(event) {
-		// 	console.log(event);
-		// 	World.add(
-		// 		engine.world,
-		// 		createVehicle(
-		// 			event.mouse.mousedownPosition.x,
-		// 			event.mouse.mousedownPosition.x,
-		// 			300,
-		// 			160
-		// 		)
-		// 	);
-		// });
 
 		Engine.run(engine);
 
