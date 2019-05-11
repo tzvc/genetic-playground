@@ -1,14 +1,6 @@
 import React from "react";
 
-import {
-	Engine,
-	Events,
-	World,
-	Mouse,
-	MouseConstraint,
-	Render,
-	Composite
-} from "matter-js";
+import { World, Mouse, MouseConstraint, Render } from "matter-js";
 
 export default class SimulatorRenderer extends React.Component {
 	constructor(props) {
