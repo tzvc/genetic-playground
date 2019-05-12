@@ -1,13 +1,6 @@
-const map = (number, in_min, in_max, out_min, out_max) => {
-	return (
-		((number - in_min) * (out_max - out_min)) / (in_max - in_min) + out_min
-	);
-};
+import { addLeadingZeros } from "../utils/string";
 
 const bitLength = Number.MAX_SAFE_INTEGER.toString(2).length;
-const addLeadingZeros = (str, targetLength) => {
-	return "0".repeat(targetLength - str.length) + str;
-};
 
 export const seed = () => {
 	const PIDParams = [Math.random(), Math.random(), Math.random()];
