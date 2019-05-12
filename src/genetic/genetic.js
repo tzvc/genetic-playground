@@ -51,7 +51,7 @@ export default class Genetic {
 			crossover_rate: 0.6,
 			fittestAlwaysSurvive: true
 		};
-		this.config = defaultConfig;
+		this.config = { ...defaultConfig, ...config };
 
 		// internals
 		this.population = [];

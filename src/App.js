@@ -15,7 +15,12 @@ import { lerp } from "./utils/math";
 export default class App extends Component {
 	constructor(props) {
 		super(props);
-		this.genEngine = new Genetic();
+		this.genEngine = new Genetic({
+			iterations: 5000,
+			population_size: 2,
+			mutation_rate: 0.6,
+			crossover_rate: 0.6
+		});
 		this.simulatorEngine = new SimulatorEngine();
 
 		this.genEngine.seed = seed;
