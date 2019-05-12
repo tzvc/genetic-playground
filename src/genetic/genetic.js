@@ -1,9 +1,9 @@
-const optimizers = {
+export const optimizers = {
 	maximize: (a, b) => a >= b,
 	minimize: (a, b) => a < b
 };
 
-const individualSelectors = {
+export const individualSelectors = {
 	tournament2: (population, optimizer) => {
 		var n = population.length;
 		var a = population[Math.floor(Math.random() * n)];
@@ -24,7 +24,7 @@ const individualSelectors = {
 		population[Math.floor(Math.random() * population.length)].genome
 };
 
-const parentsSelector = {
+export const parentsSelectors = {
 	tournament2: (population, optimizer) => [
 		individualSelectors.tournament2(population, optimizer),
 		individualSelectors.tournament2(population, optimizer)
@@ -65,7 +65,7 @@ export default class Genetic {
 		this.generation = null;
 		this.notification = null;
 		// selection functions
-		this.selectParents = parentsSelector.tournament3;
+		this.selectParents = parentsSelectors.tournament3;
 		this.selectIndividual = individualSelectors.tournament3;
 	}
 
