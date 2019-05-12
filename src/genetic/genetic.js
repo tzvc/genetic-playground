@@ -69,16 +69,12 @@ export default class Genetic {
 		this.selectIndividual = individualSelectors.tournament3;
 	}
 
-	newIndividualFromGenome(genome) {
-		return {
-			fitness: 0,
-			genome
-		};
-	}
+	newIndividualFromGenome = genome => ({
+		fitness: 0,
+		genome
+	});
 
-	shouldApplyFromRate(rate) {
-		return Math.random() <= rate;
-	}
+	shouldApplyFromRate = rate => Math.random() <= rate;
 
 	async evolve() {
 		// seed population
@@ -86,19 +82,10 @@ export default class Genetic {
 			this.population.push(this.newIndividualFromGenome(this.seed()));
 		// main loop
 		for (let i = 0; i < this.config.iterations; ++i) {
-			// calculate population fitness and rank them
-			// console.log(
-			// 	"prev fittest",
-			// 	this.population[0].fitness,
-			// 	this.population[0].genome
-			// );
 			this.population = await Promise.all(
 				this.population.map(async individual => {
-					//console.log("evaluating fitness", individual.genome);
-					const fitness = await this.fitness(individual.genome);
-					//console.log(fitness);
 					return {
-						fitness: fitness,
+						fitness: await this.fitness(individual.genome),
 						genome: individual.genome
 					};
 				})
@@ -135,7 +122,6 @@ export default class Genetic {
 			// user controlled stop
 			this.generation(this.population);
 
-			//this.notification(this.population, i);
 			// evolve population
 			let newPopulation = [];
 
@@ -151,9 +137,7 @@ export default class Genetic {
 					newPopulation.length + 1 < this.config.population_size
 				) {
 					const parents = this.selectParents(this.population, this.optimize);
-					//console.log("parents", parents);
 					const childrens = this.crossover(parents[0], parents[1]);
-					//console.log("childrens", childrens);
 					newPopulation.concat(
 						childrens.map(children => this.newIndividualFromGenome(children))
 					);
