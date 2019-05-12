@@ -19,7 +19,7 @@ export default class SimulatorEngine {
 						pair.bodyA.id === item.vehicle.collidableBodyId ||
 						pair.bodyB.id === item.vehicle.collidableBodyId
 					) {
-						item.resolver(Date.now());
+						item.resolver(item.stepCount);
 						object.splice(index, 1);
 					}
 				});
@@ -27,23 +27,28 @@ export default class SimulatorEngine {
 		});
 
 		Events.on(this.engine, "beforeUpdate", event => {
-			scene.rotateRandomly();
-			this.vehicles.forEach(pop =>
+			this.scene.rotateRandomly();
+			this.vehicles.forEach(pop => {
+				pop.stepCount += 1;
 				pop.vehicle.setWheelAngularVelocity(
 					pop.controller.update(pop.vehicle.getBodyAngle())
-				)
-			);
+				);
+			});
 		});
 
-		const scene = new Scene(window.innerWidth, window.innerHeight);
-		World.add(this.engine.world, [scene.composite]);
-
+		this.scene = new Scene(window.innerWidth, window.innerHeight);
+		World.add(this.engine.world, [this.scene.composite]);
+		//this.engine.timing.timeScale = 2;
 		Engine.run(this.engine);
 	}
 
 	removeVehicule(vehicle) {
 		// remove vehicle from simulation
 		Composite.remove(this.engine.world, vehicle.composite);
+	}
+
+	resetSimulation() {
+		this.scene.reset();
 	}
 
 	async runSimulation(p, i, d) {
@@ -59,21 +64,21 @@ export default class SimulatorEngine {
 		var resPromise = new Promise(function(resolve, reject) {
 			promiseResolver = resolve;
 		});
-
-		this.vehicles.push({
+		const obb = {
 			vehicle: vehicle,
 			controller: controller,
-			resolver: promiseResolver
-		});
+			resolver: promiseResolver,
+			stepCount: 0
+		};
+		this.vehicles.push(obb);
 
-		const startTime = Date.now();
 		World.add(this.engine.world, [vehicle.composite]);
-		setTimeout(() => promiseResolver(Date.now()), 10000);
-		const endTime = await resPromise;
+		//setTimeout(() => promiseResolver(Date.now()), 10000);
+		const stepCount = await resPromise;
 		Composite.remove(this.engine.world, vehicle.composite);
 		this.vehicles = this.vehicles.filter(function(item) {
 			return item !== vehicle;
 		});
-		return endTime - startTime;
+		return stepCount;
 	}
 }
