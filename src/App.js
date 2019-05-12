@@ -1,5 +1,6 @@
 import React, { Component } from "react";
-
+import seedrandom from "seedrandom";
+// engines
 import SimulatorEngine from "./simulator/simulator_engine";
 import Genetic, {
 	optimizers,
@@ -22,6 +23,7 @@ export default class App extends Component {
 			crossover_rate: 0.6
 		});
 		this.simulatorEngine = new SimulatorEngine();
+		seedrandom("SjfejhDBWonfpwhf8w", { global: true });
 
 		this.genEngine.seed = seed;
 		this.genEngine.mutate = mutate;
