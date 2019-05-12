@@ -42,13 +42,13 @@ const parentsSelector = {
 		individualSelectors.random(population)
 	]
 };
-module.exports = class Genetic {
+export default class Genetic {
 	constructor(config) {
 		const defaultConfig = {
-			iterations: 10000,
-			population_size: 1000,
-			mutation_rate: 0.3,
-			crossover_rate: 0.3,
+			iterations: 5000,
+			population_size: 10,
+			mutation_rate: 0.6,
+			crossover_rate: 0.6,
 			fittestAlwaysSurvive: true
 		};
 		this.config = defaultConfig;
@@ -65,8 +65,8 @@ module.exports = class Genetic {
 		this.generation = null;
 		this.notification = null;
 		// selection functions
-		this.selectParents = parentsSelector.tournament2;
-		this.selectIndividual = individualSelectors.tournament2;
+		this.selectParents = parentsSelector.tournament3;
+		this.selectIndividual = individualSelectors.tournament3;
 	}
 
 	newIndividualFromGenome(genome) {
@@ -80,27 +80,62 @@ module.exports = class Genetic {
 		return Math.random() <= rate;
 	}
 
-	evolve() {
+	async evolve() {
 		// seed population
 		for (let i = 0; i < this.config.population_size; ++i)
 			this.population.push(this.newIndividualFromGenome(this.seed()));
 		// main loop
 		for (let i = 0; i < this.config.iterations; ++i) {
 			// calculate population fitness and rank them
-			this.population = this.population
-				.map(individual => {
+			// console.log(
+			// 	"prev fittest",
+			// 	this.population[0].fitness,
+			// 	this.population[0].genome
+			// );
+			this.population = await Promise.all(
+				this.population.map(async individual => {
 					//console.log("evaluating fitness", individual.genome);
+					const fitness = await this.fitness(individual.genome);
+					//console.log(fitness);
 					return {
-						fitness: this.fitness(individual.genome),
+						fitness: fitness,
 						genome: individual.genome
 					};
 				})
-				.sort((a, b) => (this.optimize(a.fitness, b.fitness) ? -1 : 1));
+			);
+			this.population.sort((a, b) =>
+				this.optimize(a.fitness, b.fitness) ? -1 : 1
+			);
 
+			const mapNb = (number, in_min, in_max, out_min, out_max) => {
+				return (
+					((number - in_min) * (out_max - out_min)) / (in_max - in_min) +
+					out_min
+				);
+			};
+			const paramBitLength = this.population[0].genome.length / 3;
+			let params = [];
+			for (
+				let i = 0;
+				i < this.population[0].genome.length;
+				i += paramBitLength
+			) {
+				params.push(
+					mapNb(
+						parseInt(this.population[0].genome.substr(i, paramBitLength), 2),
+						0,
+						Number.MAX_SAFE_INTEGER,
+						0.0,
+						1.0
+					)
+				);
+			}
+
+			console.log("fittest", this.population[0].fitness, params);
 			// user controlled stop
-			if (this.generation ? this.generation(this.population) : false) break;
+			this.generation(this.population);
 
-			this.notification(this.population, i);
+			//this.notification(this.population, i);
 			// evolve population
 			let newPopulation = [];
 
@@ -124,13 +159,12 @@ module.exports = class Genetic {
 					);
 				} else {
 					let indiv = this.selectIndividual(this.population, this.optimize);
-					if (this.shouldApplyFromRate(this.config.mutation_rate)) {
+					if (this.shouldApplyFromRate(this.config.mutation_rate))
 						indiv = this.mutate(indiv);
-					}
 					newPopulation.push(this.newIndividualFromGenome(indiv));
 				}
 			}
 			this.population = newPopulation;
 		}
 	}
-};
+}
