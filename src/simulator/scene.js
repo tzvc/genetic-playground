@@ -1,4 +1,4 @@
-import { Composite, Bodies } from "matter-js";
+import { Composite, Body, Bodies } from "matter-js";
 
 export default class Scene {
 	constructor(width, height) {
@@ -29,7 +29,7 @@ export default class Scene {
 
 		Composite.addBody(
 			this.floor,
-			Bodies.polygon(width / 2, height * 1.7, 5, height, {
+			Bodies.polygon(width / 2, height * 1.7, 7, height, {
 				isStatic: true,
 				chamfer: { radius: 50 }
 			})
@@ -43,7 +43,7 @@ export default class Scene {
 		);
 		Composite.addBody(
 			this.floor,
-			Bodies.polygon(width / 2, height * 1.7, 3, height, {
+			Bodies.polygon(width / 2, height * 1.7, 5, height, {
 				isStatic: true,
 				chamfer: { radius: 50 }
 			})
@@ -60,6 +60,9 @@ export default class Scene {
 		Composite.addComposite(this.composite, this.floor);
 	}
 
+	reset() {
+		Composite.allBodies(this.floor).forEach(body => Body.setAngle(body, 0));
+	}
 	rotateRandomly() {
 		Composite.rotate(this.floor, Math.random() / 100, {
 			x: this.width / 2,
