@@ -32,10 +32,11 @@ export default class Scene {
 		Composite.addBody(this.composite, bottomWall);
 		this.groundWheel = Bodies.circle(
 			width / 2,
+			height * 1.8,
 			height,
-			height / 4,
 			{
-				isStatic: true
+				isStatic: true,
+				friction: 0.5
 			},
 			100
 		);
@@ -46,9 +47,11 @@ export default class Scene {
 		Body.setAngle(this.groundWheel, 0);
 		this.rotationFactor = 0;
 	}
-	rotateRandomly() {
-		Body.rotate(this.groundWheel, this.rotationFactor);
-		Body.setAngularVelocity(this.groundWheel, this.rotationFactor);
-		this.rotationFactor += 0.0001;
+	rotateRandomly(ts) {
+		const stepSpeed = Math.sin(this.rotationFactor) * 0.02;
+		Body.rotate(this.groundWheel, stepSpeed);
+		Body.setAngularVelocity(this.groundWheel, stepSpeed);
+		this.rotationFactor += 0.01;
+		console.log(Math.sin(this.rotationFactor));
 	}
 }
