@@ -23,6 +23,7 @@ export default class Scene {
 		topWall.render.visible = false;
 		bottomWall.render.visible = false;
 
+		this.sineStep = 0.0;
 		this.rotationFactor = 0.0;
 
 		this.composite = Composite.create({ label: "scene" });
@@ -40,18 +41,20 @@ export default class Scene {
 			},
 			100
 		);
+		Body.rotate(this.groundWheel, -Math.PI / 2);
 		Composite.addBody(this.composite, this.groundWheel);
 	}
 
 	reset() {
-		Body.setAngle(this.groundWheel, 0);
+		Body.rotate(this.groundWheel, -Math.PI / 2);
+		this.sineStep = 0;
 		this.rotationFactor = 0;
 	}
 	rotateRandomly(ts) {
-		const stepSpeed = Math.sin(this.rotationFactor) * 0.02;
+		const stepSpeed = Math.sin(this.sineStep) * this.rotationFactor;
 		Body.rotate(this.groundWheel, stepSpeed);
 		Body.setAngularVelocity(this.groundWheel, stepSpeed);
-		this.rotationFactor += 0.01;
-		console.log(Math.sin(this.rotationFactor));
+		this.sineStep += 0.023;
+		this.rotationFactor += 0.00001;
 	}
 }
