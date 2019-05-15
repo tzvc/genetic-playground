@@ -10,7 +10,7 @@ import { Body, Bodies, Composite, Constraint } from "matter-js";
  * @return {composite} A new composite vehicle body
  */
 export default class vehicle {
-	constructor(xx, yy, height, width) {
+	constructor(xx, yy, width, height) {
 		const wheelToBodyRatio = 2.3;
 		const wheelXOffset = 0;
 		const wheelYOffset = height / 2;

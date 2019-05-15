@@ -11,6 +11,8 @@ export default class SimulatorEngine {
 		this.engine = Engine.create({
 			// positionIterations: 20
 		});
+		this.simulationWidth = window.innerWidth;
+		this.simulationHeight = window.innerHeight;
 
 		Events.on(this.engine, "collisionStart", event => {
 			event.pairs.forEach(pair => {
@@ -36,7 +38,7 @@ export default class SimulatorEngine {
 			});
 		});
 
-		this.scene = new Scene(window.innerWidth, window.innerHeight);
+		this.scene = new Scene(this.simulationWidth, this.simulationHeight);
 		World.add(this.engine.world, [this.scene.composite]);
 		Engine.run(this.engine);
 	}
@@ -52,10 +54,10 @@ export default class SimulatorEngine {
 
 	async runSimulation(p, i, d) {
 		const vehicle = new Vehicle(
-			window.innerWidth / 2,
-			window.innerHeight / 2 - 25,
-			300,
-			160
+			this.simulationWidth / 2,
+			this.simulationHeight / 2,
+			this.simulationHeight / 5,
+			this.simulationHeight / 3
 		);
 		const controller = new PIDController(p, i, d, 1);
 		controller.setTarget(0);
