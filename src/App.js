@@ -18,7 +18,7 @@ export default class App extends Component {
 		super(props);
 		this.genEngine = new Genetic({
 			iterations: 5000,
-			population_size: 40,
+			population_size: 60,
 			mutation_rate: 0.6,
 			crossover_rate: 0.6
 		});
