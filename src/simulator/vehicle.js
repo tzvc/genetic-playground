@@ -56,7 +56,6 @@ export default class vehicle {
 		this.composite = Composite.create({
 			label: "vehicle"
 		});
-		//Body.setAngle(this.body, 0.1);
 		Composite.addBody(this.composite, this.body);
 		Composite.addBody(this.composite, this.wheel);
 		Composite.addConstraint(this.composite, axelA);

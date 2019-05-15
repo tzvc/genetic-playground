@@ -38,7 +38,6 @@ export default class SimulatorEngine {
 
 		this.scene = new Scene(window.innerWidth, window.innerHeight);
 		World.add(this.engine.world, [this.scene.composite]);
-		//this.engine.timing.timeScale = 2;
 		Engine.run(this.engine);
 	}
 
@@ -64,16 +63,14 @@ export default class SimulatorEngine {
 		var resPromise = new Promise(function(resolve, reject) {
 			promiseResolver = resolve;
 		});
-		const obb = {
+		this.vehicles.push({
 			vehicle: vehicle,
 			controller: controller,
 			resolver: promiseResolver,
 			stepCount: 0
-		};
-		this.vehicles.push(obb);
+		});
 
 		World.add(this.engine.world, [vehicle.composite]);
-		//setTimeout(() => promiseResolver(Date.now()), 10000);
 		const stepCount = await resPromise;
 		Composite.remove(this.engine.world, vehicle.composite);
 		this.vehicles = this.vehicles.filter(function(item) {
