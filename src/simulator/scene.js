@@ -41,12 +41,12 @@ export default class Scene {
 			},
 			100
 		);
-		Body.rotate(this.groundWheel, -Math.PI / 2);
+		Body.setAngle(this.groundWheel, -Math.PI / 2);
 		Composite.addBody(this.composite, this.groundWheel);
 	}
 
 	reset() {
-		Body.rotate(this.groundWheel, -Math.PI / 2);
+		Body.setAngle(this.groundWheel, -Math.PI / 2);
 		this.sineStep = 0;
 		this.rotationFactor = 0;
 	}
