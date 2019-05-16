@@ -15,6 +15,7 @@ import SettingInputLine from "./components/setting_input";
 // utils
 import { lerp } from "./utils/math";
 import Divider from "./components/divider";
+import Button from "./components/button";
 
 const Options = [{ name: "Tournament" }, { name: "random" }];
 
@@ -68,6 +69,8 @@ export default class App extends Component {
 					<SettingInputLine name="Population size" />
 					<SettingInputLine name="Mutation rate" />
 					<SettingInputLine name="Crossover rate" />
+					<Divider />
+					<Button>Run</Button>
 				</LeftPanelOverlay>
 				<SimulatorRenderer engine={this.simulatorEngine.engine} />
 			</>
