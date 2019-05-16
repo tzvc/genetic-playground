@@ -1,6 +1,11 @@
 import React from "react";
-
+import styled from "styled-components";
 import { World, Mouse, MouseConstraint, Render } from "matter-js";
+
+const Canvas = styled.canvas`
+	z-index: 1;
+	position: absolute;
+`;
 
 export default class SimulatorRenderer extends React.Component {
 	constructor(props) {
@@ -48,6 +53,6 @@ export default class SimulatorRenderer extends React.Component {
 	}
 
 	render() {
-		return <canvas ref={this.canvasRef} />;
+		return <Canvas ref={this.canvasRef} />;
 	}
 }
