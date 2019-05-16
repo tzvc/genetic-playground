@@ -28,10 +28,10 @@ export default class Scene {
 			1,
 			wallOptions
 		);
-		// rightWall.render.visible = false;
-		// leftWall.render.visible = false;
-		// topWall.render.visible = false;
-		// bottomWall.render.visible = false;
+		rightWall.render.visible = false;
+		leftWall.render.visible = false;
+		topWall.render.visible = false;
+		bottomWall.render.visible = false;
 
 		this.sineStep = 0.0;
 		this.rotationFactor = 0.0;
