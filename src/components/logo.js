@@ -2,7 +2,8 @@ import React from "react";
 import styled from "styled-components";
 
 const LogoWrapper = styled.div`
-	padding: 1em;
+	margin-bottom: 1.5rem;
+	overflow: auto;
 `;
 
 const LogoText = styled.div`

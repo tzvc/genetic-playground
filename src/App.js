@@ -11,8 +11,12 @@ import { seed, mutate, crossover } from "./genetic/genetic_config";
 // components
 import SimulatorRenderer from "./simulator/simulator_renderer";
 import LeftPanelOverlay from "./components/left_panel_overlay";
+import SettingInputLine from "./components/setting_input";
 // utils
 import { lerp } from "./utils/math";
+import Divider from "./components/divider";
+
+const Options = [{ name: "Tournament" }, { name: "random" }];
 
 export default class App extends Component {
 	constructor(props) {
@@ -57,7 +61,14 @@ export default class App extends Component {
 	render() {
 		return (
 			<>
-				<LeftPanelOverlay />
+				<LeftPanelOverlay>
+					<SettingInputLine name="Indiv selector" options={Options} />
+					<SettingInputLine name="Parent selector" options={Options} />
+					<Divider />
+					<SettingInputLine name="Population size" />
+					<SettingInputLine name="Mutation rate" />
+					<SettingInputLine name="Crossover rate" />
+				</LeftPanelOverlay>
 				<SimulatorRenderer engine={this.simulatorEngine.engine} />
 			</>
 		);

@@ -5,12 +5,13 @@ import Logo from "./logo";
 const Overlay = styled.div`
 	position: absolute;
 	z-index: 2;
-	margin: 2rem;
+	margin: 3rem;
 `;
 
-const LeftPanelOverlay = () => (
+const LeftPanelOverlay = ({ children }) => (
 	<Overlay>
 		<Logo />
+		{children}
 	</Overlay>
 );
 
