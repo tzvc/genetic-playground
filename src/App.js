@@ -10,6 +10,7 @@ import Genetic, {
 import { seed, mutate, crossover } from "./genetic/genetic_config";
 // components
 import SimulatorRenderer from "./simulator/simulator_renderer";
+import LeftPanelOverlay from "./components/left_panel_overlay";
 // utils
 import { lerp } from "./utils/math";
 
@@ -34,7 +35,9 @@ export default class App extends Component {
 		this.genEngine.generation = population => {
 			this.simulatorEngine.resetSimulation();
 		};
+
 		this.genEngine.fitness = async entity => {
+			console.log(entity);
 			const paramBitLength = entity.length / 3;
 			let params = [];
 			for (let i = 0; i < entity.length; i += paramBitLength) {
@@ -52,6 +55,11 @@ export default class App extends Component {
 	}
 
 	render() {
-		return <SimulatorRenderer engine={this.simulatorEngine.engine} />;
+		return (
+			<>
+				<LeftPanelOverlay />
+				<SimulatorRenderer engine={this.simulatorEngine.engine} />
+			</>
+		);
 	}
 }
