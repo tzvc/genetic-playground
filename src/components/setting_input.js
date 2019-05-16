@@ -25,6 +25,10 @@ const SettingInput = styled.input`
 	font-size: 1em;
 	color: white;
 	font-family: "Source Code Pro", monospace;
+	outline: none;
+	&:disabled {
+		border-color: transparent;
+	}
 `;
 
 const SettingSelect = styled.select`
@@ -39,25 +43,30 @@ const SettingSelect = styled.select`
 	font-size: 1em;
 	color: white;
 	font-family: "Source Code Pro", monospace;
+	outline: none;
+	&:disabled {
+		border-color: transparent;
+	}
 `;
 
 const SettingSelectOption = styled.option``;
 
-const SettingInputLine = ({ name, value, options }) => {
+const SettingInputLine = ({ name, value, options, disabled }) => {
 	console.log({ name, value, options });
 	return (
 		<SettingInputLineWrapper>
 			<SettingName>{`${name}:`}</SettingName>
 			{options === undefined ? (
-				<SettingInput value={"0.2"} />
+				<SettingInput disabled={disabled} value={"0.2"} />
 			) : (
-				<SettingSelect>
+				<SettingSelect disabled={disabled}>
 					{options.map(option => (
 						<SettingSelectOption key={option.name}>
 							{option.name}
 						</SettingSelectOption>
 					))}
 				</SettingSelect>
+			)}
 			)}
 		</SettingInputLineWrapper>
 	);

@@ -22,6 +22,9 @@ const Options = [{ name: "Tournament" }, { name: "random" }];
 export default class App extends Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			simulationRunning: false
+		};
 		this.genEngine = new Genetic({
 			iterations: 5000,
 			population_size: 60,
@@ -59,18 +62,51 @@ export default class App extends Component {
 		this.genEngine.evolve();
 	}
 
+	_runSimulation = () => {
+		this.setState({ simulationRunning: true });
+	};
+
+	_stopSimulation = () => {
+		this.setState({ simulationRunning: false });
+	};
+
 	render() {
 		return (
 			<>
 				<LeftPanelOverlay>
-					<SettingInputLine name="Indiv selector" options={Options} />
-					<SettingInputLine name="Parent selector" options={Options} />
+					<SettingInputLine
+						name="Indiv selector"
+						options={Options}
+						disabled={this.state.simulationRunning}
+					/>
+					<SettingInputLine
+						name="Parent selector"
+						options={Options}
+						disabled={this.state.simulationRunning}
+					/>
 					<Divider />
-					<SettingInputLine name="Population size" />
-					<SettingInputLine name="Mutation rate" />
-					<SettingInputLine name="Crossover rate" />
+					<SettingInputLine
+						name="Population size"
+						disabled={this.state.simulationRunning}
+					/>
+					<SettingInputLine
+						name="Mutation rate"
+						disabled={this.state.simulationRunning}
+					/>
+					<SettingInputLine
+						name="Crossover rate"
+						disabled={this.state.simulationRunning}
+					/>
 					<Divider />
-					<Button>Run</Button>
+					<Button
+						onClick={
+							this.state.simulationRunning
+								? this._stopSimulation
+								: this._runSimulation
+						}
+					>
+						{this.state.simulationRunning ? "Stop" : "Run"}
+					</Button>
 				</LeftPanelOverlay>
 				<SimulatorRenderer engine={this.simulatorEngine.engine} />
 			</>
