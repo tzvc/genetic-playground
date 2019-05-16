@@ -9,6 +9,7 @@ const Button = styled.button`
 	font-size: 1rem;
 	font-family: "Source Code Pro", monospace;
 	cursor: pointer;
+	outline: none;
 	&:hover {
 		opacity: 0.8;
 	}
