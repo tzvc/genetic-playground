@@ -25,12 +25,7 @@ export default class App extends Component {
 		this.state = {
 			simulationRunning: false
 		};
-		this.genEngine = new Genetic({
-			iterations: 5000,
-			population_size: 60,
-			mutation_rate: 0.6,
-			crossover_rate: 0.6
-		});
+		this.genEngine = new Genetic();
 		this.simulatorEngine = new SimulatorEngine();
 		seedrandom("SjfejhDBWonfpwhf8w", { global: true });
 
@@ -59,7 +54,12 @@ export default class App extends Component {
 			);
 		};
 
-		this.genEngine.evolve();
+		this.genEngine.run({
+			iterations: 5000,
+			population_size: 60,
+			mutation_rate: 0.6,
+			crossover_rate: 0.6
+		});
 	}
 
 	_runSimulation = () => {

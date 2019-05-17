@@ -42,17 +42,16 @@ export const parentsSelectors = {
 		individualSelectors.random(population)
 	]
 };
-export default class Genetic {
-	constructor(config) {
-		const defaultConfig = {
-			iterations: 5000,
-			population_size: 10,
-			mutation_rate: 0.6,
-			crossover_rate: 0.6,
-			fittestAlwaysSurvive: true
-		};
-		this.config = { ...defaultConfig, ...config };
 
+const defaultConfig = {
+	iterations: 5000,
+	population_size: 10,
+	mutation_rate: 0.6,
+	crossover_rate: 0.6,
+	fittestAlwaysSurvive: true
+};
+export default class Genetic {
+	constructor() {
 		// internals
 		this.population = [];
 
@@ -76,7 +75,9 @@ export default class Genetic {
 
 	shouldApplyFromRate = rate => Math.random() <= rate;
 
-	async evolve() {
+	async run(config) {
+		this.config = { ...defaultConfig, ...config };
+
 		// seed population
 		for (let i = 0; i < this.config.population_size; ++i)
 			this.population.push(this.newIndividualFromGenome(this.seed()));
