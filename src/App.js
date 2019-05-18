@@ -16,6 +16,7 @@ import SettingInputLine from "./components/setting_input";
 import { lerp } from "./utils/math";
 import Divider from "./components/divider";
 import Button from "./components/button";
+import Author from "./components/author";
 
 const Options = [{ name: "Tournament" }, { name: "random" }];
 
@@ -74,6 +75,8 @@ export default class App extends Component {
 		return (
 			<>
 				<LeftPanelOverlay>
+					<Author />
+					<Divider />
 					<SettingInputLine
 						name="Indiv selector"
 						options={Options}
