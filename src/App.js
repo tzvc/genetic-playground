@@ -35,54 +35,45 @@ export default class App extends Component {
 			crossover_rate: 0.5,
 			simulationRunning: false
 		};
-		this.genEngine = new Genetic();
+		this.geneticEngine = new Genetic();
+		console.log(this.geneticEngine);
 		this.simulatorEngine = new SimulatorEngine();
 		seedrandom("SjfejhDBWonfpwhf8w", { global: true });
 
-		this.genEngine.seed = seed;
-		this.genEngine.mutate = mutate;
-		this.genEngine.crossover = crossover;
-		this.genEngine.optimize = optimizers.maximize;
-		this.genEngine.selectIndividual = individualSelectors.tournament3;
-		this.genEngine.selectParents = parentsSelectors.tournament3;
-		this.genEngine.generation = population => {
-			this.simulatorEngine.resetSimulation();
+		this.geneticEngine.seed = seed;
+		this.geneticEngine.mutate = mutate;
+		this.geneticEngine.crossover = crossover;
+		this.geneticEngine.optimize = optimizers.maximize;
+		this.geneticEngine.selectIndividual = individualSelectors.tournament3;
+		this.geneticEngine.selectParents = parentsSelectors.tournament3;
+		this.geneticEngine.generation = population => {
+			this.simulatorEngine.reset();
 		};
 
-		this.genEngine.fitness = async entity => {
-			console.log(entity);
+		this.geneticEngine.fitness = async entity => {
 			const paramBitLength = entity.length / 3;
 			let params = [];
 			for (let i = 0; i < entity.length; i += paramBitLength) {
 				const decoded = parseInt(entity.substr(i, paramBitLength), 2);
 				params.push(lerp(decoded, 0, Number.MAX_SAFE_INTEGER, 0.0, 1.0));
 			}
-			return await this.simulatorEngine.runSimulation(
-				params[0],
-				params[1],
-				params[2]
-			);
+			return await this.simulatorEngine.run(params[0], params[1], params[2]);
 		};
-
-		this.genEngine.run({
-			iterations: 5000,
-			population_size: 60,
-			mutation_rate: 0.6,
-			crossover_rate: 0.6
-		});
 	}
 
 	_runSimulation = () => {
-		this.genEngine.run({
+		this.geneticEngine.run({
 			iterations: 5000,
-			population_size: this.state.population_size,
-			mutation_rate: this.state.mutation_rate,
-			crossover_rate: this.state.crossover_rate
+			population_size: parseFloat(this.state.population_size),
+			mutation_rate: parseFloat(this.state.mutation_rate),
+			crossover_rate: parseFloat(this.state.crossover_rate)
 		});
 		this.setState({ simulationRunning: true });
 	};
 
 	_stopSimulation = () => {
+		this.geneticEngine.stop();
+		this.simulatorEngine.stop();
 		this.setState({ simulationRunning: false });
 	};
 
