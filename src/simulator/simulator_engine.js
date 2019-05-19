@@ -48,11 +48,16 @@ export default class SimulatorEngine {
 		Composite.remove(this.engine.world, vehicle.composite);
 	}
 
-	resetSimulation() {
+	reset() {
 		this.scene.reset();
 	}
 
-	async runSimulation(p, i, d) {
+	stop() {
+		// resolve all running vehicles
+		this.vehicles.forEach(vehicle => vehicle.resolver(vehicle.stepCount));
+	}
+
+	async run(p, i, d) {
 		const vehicle = new Vehicle(
 			this.simulationWidth / 2,
 			this.simulationHeight / 2,
