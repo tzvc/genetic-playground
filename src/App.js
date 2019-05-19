@@ -98,13 +98,13 @@ export default class App extends Component {
 					<Author />
 					<Divider />
 					<SettingInputLine
-						setting="Indiv selector"
+						text="Indiv selector"
 						name="indiv_selector"
 						options={Options}
 						disabled={this.state.simulationRunning}
 					/>
 					<SettingInputLine
-						setting="Parent selector"
+						text="Parent selector"
 						name="parent_selector"
 						options={Options}
 						disabled={this.state.simulationRunning}
