@@ -51,15 +51,32 @@ const SettingSelect = styled.select`
 
 const SettingSelectOption = styled.option``;
 
-const SettingInputLine = ({ name, value, options, disabled }) => {
-	console.log({ name, value, options });
+const SettingInputLine = ({
+	text,
+	name,
+	value,
+	options,
+	disabled,
+	onChange
+}) => {
+	console.log({ text, value, options });
 	return (
 		<SettingInputLineWrapper>
-			<SettingName>{`${name}:`}</SettingName>
+			<SettingName>{`${text}:`}</SettingName>
 			{options === undefined ? (
-				<SettingInput disabled={disabled} value={"0.2"} />
+				<SettingInput
+					name={name}
+					onChange={onChange}
+					disabled={disabled}
+					value={value}
+				/>
 			) : (
-				<SettingSelect disabled={disabled}>
+				<SettingSelect
+					name={name}
+					onChange={onChange}
+					disabled={disabled}
+					value={value}
+				>
 					{options.map(option => (
 						<SettingSelectOption key={option.name}>
 							{option.name}

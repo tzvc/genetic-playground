@@ -18,12 +18,21 @@ import Divider from "./components/divider";
 import Button from "./components/button";
 import Author from "./components/author";
 
+const settings = [
+	{ text: "Population Size", name: "population_size" },
+	{ text: "Mutation rate", name: "mutation_rate" },
+	{ text: "Crossover rate", name: "crossover_rate" }
+];
 const Options = [{ name: "Tournament" }, { name: "random" }];
 
 export default class App extends Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			// settings
+			population_size: 10,
+			mutation_rate: 0.5,
+			crossover_rate: 0.5,
 			simulationRunning: false
 		};
 		this.genEngine = new Genetic();
@@ -64,11 +73,22 @@ export default class App extends Component {
 	}
 
 	_runSimulation = () => {
+		this.genEngine.run({
+			iterations: 5000,
+			population_size: this.state.population_size,
+			mutation_rate: this.state.mutation_rate,
+			crossover_rate: this.state.crossover_rate
+		});
 		this.setState({ simulationRunning: true });
 	};
 
 	_stopSimulation = () => {
 		this.setState({ simulationRunning: false });
+	};
+
+	_handleSettingChange = e => {
+		console.log("change", e.target.name, e.target.value);
+		this.setState({ [e.target.name]: e.target.value });
 	};
 
 	render() {
@@ -78,28 +98,28 @@ export default class App extends Component {
 					<Author />
 					<Divider />
 					<SettingInputLine
-						name="Indiv selector"
+						setting="Indiv selector"
+						name="indiv_selector"
 						options={Options}
 						disabled={this.state.simulationRunning}
 					/>
 					<SettingInputLine
-						name="Parent selector"
+						setting="Parent selector"
+						name="parent_selector"
 						options={Options}
 						disabled={this.state.simulationRunning}
 					/>
 					<Divider />
-					<SettingInputLine
-						name="Population size"
-						disabled={this.state.simulationRunning}
-					/>
-					<SettingInputLine
-						name="Mutation rate"
-						disabled={this.state.simulationRunning}
-					/>
-					<SettingInputLine
-						name="Crossover rate"
-						disabled={this.state.simulationRunning}
-					/>
+					{settings.map(({ text, name }) => (
+						<SettingInputLine
+							key={name}
+							text={text}
+							name={name}
+							value={this.state[name]}
+							disabled={this.state.simulationRunning}
+							onChange={this._handleSettingChange}
+						/>
+					))}
 					<Divider />
 					<Button
 						onClick={
