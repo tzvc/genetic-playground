@@ -54,6 +54,7 @@ export default class Genetic {
 	constructor() {
 		// internals
 		this.population = [];
+		this.stopFlag = false;
 
 		// population functions
 		this.fitness = null;
@@ -75,14 +76,18 @@ export default class Genetic {
 
 	shouldApplyFromRate = rate => Math.random() <= rate;
 
+	stop() {
+		this.stopFlag = true;
+	}
+
 	async run(config) {
 		this.config = { ...defaultConfig, ...config };
-
+		this.stopFlag = false;
 		// seed population
 		for (let i = 0; i < this.config.population_size; ++i)
 			this.population.push(this.newIndividualFromGenome(this.seed()));
 		// main loop
-		for (let i = 0; i < this.config.iterations; ++i) {
+		for (let i = 0; i < this.config.iterations && !this.stopFlag; ++i) {
 			this.population = await Promise.all(
 				this.population.map(async individual => {
 					return {
