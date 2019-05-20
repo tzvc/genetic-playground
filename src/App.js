@@ -12,11 +12,11 @@ import { seed, mutate, crossover } from "./genetic/genetic_config";
 import SimulatorRenderer from "./simulator/simulator_renderer";
 import LeftPanelOverlay from "./components/left_panel_overlay";
 import SettingInputLine from "./components/setting_input";
-// utils
-import { lerp } from "./utils/math";
 import Divider from "./components/divider";
 import Button from "./components/button";
 import Author from "./components/author";
+// utils
+import { decodeFloatsFromBinaryStr } from "./utils/string";
 
 const settings = [
 	{ text: "Population Size", name: "population_size" },
@@ -36,7 +36,6 @@ export default class App extends Component {
 			simulationRunning: false
 		};
 		this.geneticEngine = new Genetic();
-		console.log(this.geneticEngine);
 		this.simulatorEngine = new SimulatorEngine();
 		seedrandom("SjfejhDBWonfpwhf8w", { global: true });
 
@@ -51,17 +50,22 @@ export default class App extends Component {
 		};
 
 		this.geneticEngine.fitness = async entity => {
-			const paramBitLength = entity.length / 3;
-			let params = [];
-			for (let i = 0; i < entity.length; i += paramBitLength) {
-				const decoded = parseInt(entity.substr(i, paramBitLength), 2);
-				params.push(lerp(decoded, 0, Number.MAX_SAFE_INTEGER, 0.0, 1.0));
-			}
-			return await this.simulatorEngine.run(params[0], params[1], params[2]);
+			const pidParams = decodeFloatsFromBinaryStr(entity, 3);
+			return await this.simulatorEngine.run(
+				pidParams[0],
+				pidParams[1],
+				pidParams[2]
+			);
 		};
 	}
 
 	_runSimulation = () => {
+		console.log("running simulation", {
+			iterations: 5000,
+			population_size: parseFloat(this.state.population_size),
+			mutation_rate: parseFloat(this.state.mutation_rate),
+			crossover_rate: parseFloat(this.state.crossover_rate)
+		});
 		this.geneticEngine.run({
 			iterations: 5000,
 			population_size: parseFloat(this.state.population_size),
