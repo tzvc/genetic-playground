@@ -82,7 +82,6 @@ export default class Genetic {
 
 	async run(config) {
 		this.config = { ...defaultConfig, ...config };
-		this.stopFlag = false;
 		// seed population
 		for (let i = 0; i < this.config.population_size; ++i)
 			this.population.push(this.newIndividualFromGenome(this.seed()));
@@ -156,5 +155,9 @@ export default class Genetic {
 			}
 			this.population = newPopulation;
 		}
+
+		// cleanup
+		this.population = [];
+		this.stopFlag = false;
 	}
 }
