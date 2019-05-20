@@ -57,7 +57,7 @@ export default class SimulatorEngine {
 		this.vehicles.forEach(vehicle => vehicle.resolver(vehicle.stepCount));
 	}
 
-	async run(p, i, d) {
+	async addVehicle(p, i, d) {
 		const vehicle = new Vehicle(
 			this.simulationWidth / 2,
 			this.simulationHeight / 2,
@@ -77,12 +77,18 @@ export default class SimulatorEngine {
 			stepCount: 0
 		});
 
-		World.add(this.engine.world, [vehicle.composite]);
 		const stepCount = await resPromise;
 		Composite.remove(this.engine.world, vehicle.composite);
 		this.vehicles = this.vehicles.filter(function(item) {
 			return item !== vehicle;
 		});
 		return stepCount;
+	}
+
+	run() {
+		this.scene.reset();
+		this.vehicles.forEach(vehicle => {
+			World.add(this.engine.world, [vehicle.vehicle.composite]);
+		});
 	}
 }

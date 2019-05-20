@@ -89,14 +89,15 @@ export default class Genetic {
 			this.population.push(this.newIndividualFromGenome(this.seed()));
 		// main loop
 		for (let i = 0; i < this.config.iterations && !this.stopFlag; ++i) {
-			this.population = await Promise.all(
-				this.population.map(async individual => {
-					return {
-						fitness: await this.fitness(individual.genome),
-						genome: individual.genome
-					};
-				})
-			);
+			this.population = this.population.map(async individual => {
+				return {
+					fitness: await this.fitness(individual.genome),
+					genome: individual.genome
+				};
+			});
+
+			if (this.preFitnessEval) this.preFitnessEval();
+			this.population = await Promise.all(this.population);
 			this.population.sort((a, b) =>
 				this.optimize(a.fitness, b.fitness) ? -1 : 1
 			);

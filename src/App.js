@@ -46,12 +46,18 @@ export default class App extends Component {
 		this.geneticEngine.selectIndividual = individualSelectors.tournament3;
 		this.geneticEngine.selectParents = parentsSelectors.tournament3;
 		this.geneticEngine.generation = population => {
-			this.simulatorEngine.reset();
+			//this.simulatorEngine.reset();
+		};
+
+		this.geneticEngine.preFitnessEval = () => {
+			console.log("running simulation");
+			this.simulatorEngine.run();
 		};
 
 		this.geneticEngine.fitness = async entity => {
 			const pidParams = decodeFloatsFromBinaryStr(entity, 3);
-			return await this.simulatorEngine.run(
+			console.log("Added vehicle", pidParams);
+			return await this.simulatorEngine.addVehicle(
 				pidParams[0],
 				pidParams[1],
 				pidParams[2]
