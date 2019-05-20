@@ -49,13 +49,13 @@ export default class App extends Component {
 		};
 
 		this.geneticEngine.preFitnessEval = () => {
-			console.log("running simulation");
+			//console.log("running simulation");
 			this.simulatorEngine.run();
 		};
 
 		this.geneticEngine.fitness = async entity => {
 			const pidParams = decodeFloatsFromBinaryStr(entity, 3);
-			console.log("Added vehicle", pidParams);
+			//console.log("Added vehicle", pidParams);
 			return await this.simulatorEngine.addVehicle(
 				pidParams[0],
 				pidParams[1],
@@ -66,13 +66,13 @@ export default class App extends Component {
 
 	_runSimulation = () => {
 		seedrandom("SjfejhDBWonfpwhf8w", { global: true });
-
-		console.log("running simulation", {
-			iterations: 5000,
-			population_size: parseFloat(this.state.population_size),
-			mutation_rate: parseFloat(this.state.mutation_rate),
-			crossover_rate: parseFloat(this.state.crossover_rate)
-		});
+		//console.log(Math.random());
+		// console.log("running simulation", {
+		// 	iterations: 5000,
+		// 	population_size: parseFloat(this.state.population_size),
+		// 	mutation_rate: parseFloat(this.state.mutation_rate),
+		// 	crossover_rate: parseFloat(this.state.crossover_rate)
+		// });
 		this.geneticEngine.run({
 			iterations: 5000,
 			population_size: parseFloat(this.state.population_size),

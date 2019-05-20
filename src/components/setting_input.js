@@ -59,7 +59,6 @@ const SettingInputLine = ({
 	disabled,
 	onChange
 }) => {
-	console.log({ text, value, options });
 	return (
 		<SettingInputLineWrapper>
 			<SettingName>{`${text}:`}</SettingName>

@@ -8,9 +8,7 @@ import Scene from "./scene";
 export default class SimulatorEngine {
 	constructor() {
 		this.vehicles = [];
-		this.engine = Engine.create({
-			// positionIterations: 20
-		});
+		this.engine = Engine.create();
 		this.simulationWidth = window.innerWidth;
 		this.simulationHeight = window.innerHeight;
 
@@ -75,13 +73,13 @@ export default class SimulatorEngine {
 		this.vehicles.push(vehicle);
 
 		const stepCount = await resPromise;
-		console.log("deleting vehicle");
+		//console.log("deleting vehicle");
 		Composite.remove(this.engine.world, vehicle.obj.composite);
 		this.vehicles = this.vehicles.filter(item => {
-			console.log(item, vehicle);
+			//console.log(item, vehicle);
 			return item !== vehicle;
 		});
-		console.log(this.vehicles);
+		//console.log(this.vehicles);
 		return stepCount;
 	}
 
