@@ -1,3 +1,5 @@
+import { decodeFloatsFromBinaryStr } from "../utils/string";
+
 export const optimizers = {
 	maximize: (a, b) => a >= b,
 	minimize: (a, b) => a < b
@@ -99,31 +101,11 @@ export default class Genetic {
 				this.optimize(a.fitness, b.fitness) ? -1 : 1
 			);
 
-			const mapNb = (number, in_min, in_max, out_min, out_max) => {
-				return (
-					((number - in_min) * (out_max - out_min)) / (in_max - in_min) +
-					out_min
-				);
-			};
-			const paramBitLength = this.population[0].genome.length / 3;
-			let params = [];
-			for (
-				let i = 0;
-				i < this.population[0].genome.length;
-				i += paramBitLength
-			) {
-				params.push(
-					mapNb(
-						parseInt(this.population[0].genome.substr(i, paramBitLength), 2),
-						0,
-						Number.MAX_SAFE_INTEGER,
-						0.0,
-						1.0
-					)
-				);
-			}
-
-			console.log("fittest", this.population[0].fitness, params);
+			console.log(
+				"fittest",
+				this.population[0].fitness,
+				decodeFloatsFromBinaryStr(this.population[0].genome, 3)
+			);
 			// user controlled stop
 			this.generation(this.population);
 
