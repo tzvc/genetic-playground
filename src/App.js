@@ -37,7 +37,6 @@ export default class App extends Component {
 		};
 		this.geneticEngine = new Genetic();
 		this.simulatorEngine = new SimulatorEngine();
-		seedrandom("SjfejhDBWonfpwhf8w", { global: true });
 
 		this.geneticEngine.seed = seed;
 		this.geneticEngine.mutate = mutate;
@@ -66,6 +65,8 @@ export default class App extends Component {
 	}
 
 	_runSimulation = () => {
+		seedrandom("SjfejhDBWonfpwhf8w", { global: true });
+
 		console.log("running simulation", {
 			iterations: 5000,
 			population_size: parseFloat(this.state.population_size),
