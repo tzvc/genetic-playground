@@ -18,8 +18,8 @@ export default class SimulatorEngine {
 			event.pairs.forEach(pair => {
 				this.vehicles.forEach((item, index, object) => {
 					if (
-						pair.bodyA.id === item.vehicle.collidableBodyId ||
-						pair.bodyB.id === item.vehicle.collidableBodyId
+						pair.bodyA.id === item.obj.collidableBodyId ||
+						pair.bodyB.id === item.obj.collidableBodyId
 					) {
 						item.resolver(item.stepCount);
 						object.splice(index, 1);
@@ -30,10 +30,10 @@ export default class SimulatorEngine {
 
 		Events.on(this.engine, "beforeUpdate", event => {
 			this.scene.rotateRandomly();
-			this.vehicles.forEach(pop => {
-				pop.stepCount += 1;
-				pop.vehicle.setWheelAngularVelocity(
-					pop.controller.update(pop.vehicle.getBodyAngle())
+			this.vehicles.forEach(vehicle => {
+				vehicle.stepCount += 1;
+				vehicle.obj.setWheelAngularVelocity(
+					vehicle.controller.update(vehicle.obj.getBodyAngle())
 				);
 			});
 		});
@@ -43,22 +43,18 @@ export default class SimulatorEngine {
 		Engine.run(this.engine);
 	}
 
-	removeVehicule(vehicle) {
-		// remove vehicle from simulation
-		Composite.remove(this.engine.world, vehicle.composite);
-	}
-
 	reset() {
 		this.scene.reset();
 	}
 
 	stop() {
 		// resolve all running vehicles
+		console.log("stopping simulation...");
 		this.vehicles.forEach(vehicle => vehicle.resolver(vehicle.stepCount));
 	}
 
 	async addVehicle(p, i, d) {
-		const vehicle = new Vehicle(
+		const vehicleObj = new Vehicle(
 			this.simulationWidth / 2,
 			this.simulationHeight / 2,
 			this.simulationHeight / 5,
@@ -70,25 +66,29 @@ export default class SimulatorEngine {
 		var resPromise = new Promise(function(resolve, reject) {
 			promiseResolver = resolve;
 		});
-		this.vehicles.push({
-			vehicle: vehicle,
+		const vehicle = {
+			obj: vehicleObj,
 			controller: controller,
 			resolver: promiseResolver,
 			stepCount: 0
-		});
+		};
+		this.vehicles.push(vehicle);
 
 		const stepCount = await resPromise;
-		Composite.remove(this.engine.world, vehicle.composite);
-		this.vehicles = this.vehicles.filter(function(item) {
+		console.log("deleting vehicle");
+		Composite.remove(this.engine.world, vehicle.obj.composite);
+		this.vehicles = this.vehicles.filter(item => {
+			console.log(item, vehicle);
 			return item !== vehicle;
 		});
+		console.log(this.vehicles);
 		return stepCount;
 	}
 
 	run() {
 		this.scene.reset();
 		this.vehicles.forEach(vehicle => {
-			World.add(this.engine.world, [vehicle.vehicle.composite]);
+			World.add(this.engine.world, [vehicle.obj.composite]);
 		});
 	}
 }
