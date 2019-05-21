@@ -18,6 +18,7 @@ import Author from "./components/author";
 // utils
 import { decodeFloatsFromBinaryStr } from "./utils/string";
 import VisPanel from "./components/vis_panel";
+import GenomeVis from "./components/genome_vis";
 
 const settings = [
 	{ text: "Population Size", name: "population_size" },
@@ -44,6 +45,7 @@ export default class App extends Component {
 			average_fitness_evol: 0.0,
 			best_fitness: 0.0,
 			best_fitness_evol: 0.0,
+			ex_fittest_genome: "",
 			fittest_genome: ""
 		};
 		this.geneticEngine = new Genetic();
@@ -79,6 +81,8 @@ export default class App extends Component {
 						? 0.0
 						: ((population[0].fitness - pv.best_fitness) / pv.best_fitness) *
 						  100,
+				ex_fittest_genome:
+					generation === 0 ? population[0].genome : pv.fittest_genome,
 				fittest_genome: population[0].genome
 			}));
 		};
@@ -183,6 +187,10 @@ export default class App extends Component {
 								this.state.best_fitness_evol > 0 ? "+" : ""
 							}${this.state.best_fitness_evol.toFixed(1)}%)`}</StatLine>
 							<StatLine>{`Fittest genome:`}</StatLine>
+							<GenomeVis
+								exGenome={this.state.ex_fittest_genome}
+								genome={this.state.fittest_genome}
+							/>
 						</VisPanel>
 					)}
 				</Overlay>
