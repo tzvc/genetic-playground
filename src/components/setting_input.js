@@ -77,8 +77,8 @@ const SettingInputLine = ({
 					value={value}
 				>
 					{options.map(option => (
-						<SettingSelectOption key={option.name}>
-							{option.name}
+						<SettingSelectOption key={option} value={option}>
+							{option}
 						</SettingSelectOption>
 					))}
 				</SettingSelect>

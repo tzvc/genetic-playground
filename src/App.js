@@ -2,11 +2,8 @@ import React, { Component } from "react";
 import seedrandom from "seedrandom";
 // engines
 import SimulatorEngine from "./simulator/simulator_engine";
-import Genetic, {
-	optimizers,
-	individualSelectors,
-	parentsSelectors
-} from "./genetic/genetic";
+import Genetic, { optimizers } from "./genetic/genetic";
+import { individualSelectors, parentsSelectors } from "./genetic/selectors";
 import { seed, mutate, crossover } from "./genetic/genetic_config";
 // components
 import SimulatorRenderer from "./simulator/simulator_renderer";
@@ -30,9 +27,12 @@ export default class App extends Component {
 		super(props);
 		this.state = {
 			// settings
+			indiv_selector: "tournament3",
+			parent_selector: "tournament3",
 			population_size: 10,
 			mutation_rate: 0.5,
 			crossover_rate: 0.5,
+			// internal
 			simulationRunning: false
 		};
 		this.geneticEngine = new Genetic();
@@ -42,8 +42,10 @@ export default class App extends Component {
 		this.geneticEngine.mutate = mutate;
 		this.geneticEngine.crossover = crossover;
 		this.geneticEngine.optimize = optimizers.maximize;
-		this.geneticEngine.selectIndividual = individualSelectors.tournament3;
-		this.geneticEngine.selectParents = parentsSelectors.tournament3;
+		this.geneticEngine.selectIndividual =
+			individualSelectors[this.state.indiv_selector];
+		this.geneticEngine.selectParents =
+			parentsSelectors[this.state.parent_selector];
 		this.geneticEngine.generation = population => {
 			//this.simulatorEngine.reset();
 		};
@@ -66,13 +68,6 @@ export default class App extends Component {
 
 	_runSimulation = () => {
 		seedrandom("SjfejhDBWonfpwhf8w", { global: true });
-		//console.log(Math.random());
-		// console.log("running simulation", {
-		// 	iterations: 5000,
-		// 	population_size: parseFloat(this.state.population_size),
-		// 	mutation_rate: parseFloat(this.state.mutation_rate),
-		// 	crossover_rate: parseFloat(this.state.crossover_rate)
-		// });
 		this.geneticEngine.run({
 			iterations: 5000,
 			population_size: parseFloat(this.state.population_size),
@@ -88,10 +83,8 @@ export default class App extends Component {
 		this.setState({ simulationRunning: false });
 	};
 
-	_handleSettingChange = e => {
-		console.log("change", e.target.name, e.target.value);
+	_handleSettingChange = e =>
 		this.setState({ [e.target.name]: e.target.value });
-	};
 
 	render() {
 		return (
@@ -102,14 +95,26 @@ export default class App extends Component {
 					<SettingInputLine
 						text="Indiv selector"
 						name="indiv_selector"
-						options={Options}
+						value={this.state.indiv_selector}
+						options={Object.keys(individualSelectors)}
 						disabled={this.state.simulationRunning}
+						onChange={e => {
+							this.geneticEngine.selectIndividual =
+								individualSelectors[e.target.value];
+							this._handleSettingChange(e);
+						}}
 					/>
 					<SettingInputLine
 						text="Parent selector"
 						name="parent_selector"
-						options={Options}
+						value={this.state.parent_selector}
+						options={Object.keys(parentsSelectors)}
 						disabled={this.state.simulationRunning}
+						onChange={e => {
+							this.geneticEngine.selectParents =
+								parentsSelectors[e.target.value];
+							this._handleSettingChange(e);
+						}}
 					/>
 					<Divider />
 					{settings.map(({ text, name }) => (
