@@ -7,13 +7,16 @@ import { individualSelectors, parentsSelectors } from "./genetic/selectors";
 import { seed, mutate, crossover } from "./genetic/genetic_config";
 // components
 import SimulatorRenderer from "./simulator/simulator_renderer";
-import LeftPanelOverlay from "./components/left_panel_overlay";
+import Logo from "./components/logo";
+import Overlay from "./components/overlay";
+import SettingsPanel from "./components/settings_panel";
 import SettingInputLine from "./components/setting_input";
 import Divider from "./components/divider";
 import Button from "./components/button";
 import Author from "./components/author";
 // utils
 import { decodeFloatsFromBinaryStr } from "./utils/string";
+import VisPanel from "./components/vis_panel";
 
 const settings = [
 	{ text: "Population Size", name: "population_size" },
@@ -90,55 +93,60 @@ export default class App extends Component {
 	render() {
 		return (
 			<>
-				<LeftPanelOverlay>
-					<Author />
-					<Divider />
-					<SettingInputLine
-						text="Indiv selector"
-						name="indiv_selector"
-						value={this.state.indiv_selector}
-						options={Object.keys(individualSelectors)}
-						disabled={this.state.simulationRunning}
-						onChange={e => {
-							this.geneticEngine.selectIndividual =
-								individualSelectors[e.target.value];
-							this._handleSettingChange(e);
-						}}
-					/>
-					<SettingInputLine
-						text="Parent selector"
-						name="parent_selector"
-						value={this.state.parent_selector}
-						options={Object.keys(parentsSelectors)}
-						disabled={this.state.simulationRunning}
-						onChange={e => {
-							this.geneticEngine.selectParents =
-								parentsSelectors[e.target.value];
-							this._handleSettingChange(e);
-						}}
-					/>
-					<Divider />
-					{settings.map(({ text, name }) => (
+				<Overlay>
+					<SettingsPanel>
+						<Logo />
+						<Author />
+						<Divider />
 						<SettingInputLine
-							key={name}
-							text={text}
-							name={name}
-							value={this.state[name]}
+							text="Indiv selector"
+							name="indiv_selector"
+							value={this.state.indiv_selector}
+							options={Object.keys(individualSelectors)}
 							disabled={this.state.simulationRunning}
-							onChange={this._handleSettingChange}
+							onChange={e => {
+								this.geneticEngine.selectIndividual =
+									individualSelectors[e.target.value];
+								this._handleSettingChange(e);
+							}}
 						/>
-					))}
-					<Divider />
-					<Button
-						onClick={
-							this.state.simulationRunning
-								? this._stopSimulation
-								: this._runSimulation
-						}
-					>
-						{this.state.simulationRunning ? "Stop" : "Run"}
-					</Button>
-				</LeftPanelOverlay>
+						<SettingInputLine
+							text="Parent selector"
+							name="parent_selector"
+							value={this.state.parent_selector}
+							options={Object.keys(parentsSelectors)}
+							disabled={this.state.simulationRunning}
+							onChange={e => {
+								this.geneticEngine.selectParents =
+									parentsSelectors[e.target.value];
+								this._handleSettingChange(e);
+							}}
+						/>
+						<Divider />
+						{settings.map(({ text, name }) => (
+							<SettingInputLine
+								key={name}
+								text={text}
+								name={name}
+								value={this.state[name]}
+								disabled={this.state.simulationRunning}
+								onChange={this._handleSettingChange}
+							/>
+						))}
+						<Divider />
+						<Button
+							onClick={
+								this.state.simulationRunning
+									? this._stopSimulation
+									: this._runSimulation
+							}
+						>
+							{this.state.simulationRunning ? "Stop" : "Run"}
+						</Button>
+					</SettingsPanel>
+					<VisPanel />
+				</Overlay>
+
 				<SimulatorRenderer engine={this.simulatorEngine.engine} />
 			</>
 		);
