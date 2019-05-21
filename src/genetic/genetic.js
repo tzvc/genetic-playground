@@ -48,6 +48,9 @@ export default class Genetic {
 		// seed population
 		for (let i = 0; i < this.config.population_size; ++i)
 			this.population.push(this.newIndividualFromGenome(this.seed()));
+
+		this.generation(0, this.population);
+
 		// main loop
 		for (let gen = 0; gen < this.config.iterations && !this.stopFlag; ++gen) {
 			this.population = this.population.map(async individual => {
