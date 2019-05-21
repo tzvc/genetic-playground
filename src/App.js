@@ -173,16 +173,18 @@ export default class App extends Component {
 							{this.state.simulationRunning ? "Stop" : "Run"}
 						</Button>
 					</SettingsPanel>
-					<VisPanel>
-						<StatLine>{`Generation: ${this.state.generation}`}</StatLine>
-						<StatLine>{`Average fitness: ${this.state.average_fitness} (${
-							this.state.average_fitness_evol > 0 ? "+" : ""
-						}${this.state.average_fitness_evol.toFixed(1)}%)`}</StatLine>
-						<StatLine>{`Best fitness: ${this.state.best_fitness} (${
-							this.state.best_fitness_evol > 0 ? "+" : ""
-						}${this.state.best_fitness_evol.toFixed(1)}%)`}</StatLine>
-						<StatLine>{`Fittest genome:`}</StatLine>
-					</VisPanel>
+					{this.state.simulationRunning && (
+						<VisPanel>
+							<StatLine>{`Generation: ${this.state.generation}`}</StatLine>
+							<StatLine>{`Average fitness: ${this.state.average_fitness} (${
+								this.state.average_fitness_evol > 0 ? "+" : ""
+							}${this.state.average_fitness_evol.toFixed(1)}%)`}</StatLine>
+							<StatLine>{`Best fitness: ${this.state.best_fitness} (${
+								this.state.best_fitness_evol > 0 ? "+" : ""
+							}${this.state.best_fitness_evol.toFixed(1)}%)`}</StatLine>
+							<StatLine>{`Fittest genome:`}</StatLine>
+						</VisPanel>
+					)}
 				</Overlay>
 
 				<SimulatorRenderer engine={this.simulatorEngine.engine} />
