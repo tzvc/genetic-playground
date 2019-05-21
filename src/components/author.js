@@ -19,7 +19,11 @@ const AuthorLink = styled.a`
 
 const Author = () => (
 	<AuthorWrapper>
-		Made with ❤️ by{" "}
+		Made with{" "}
+		<span role="img" aria-label="heart">
+			❤️
+		</span>{" "}
+		by{" "}
 		<AuthorLink href="https://github.com/theochampion">
 			Théo Champion
 		</AuthorLink>

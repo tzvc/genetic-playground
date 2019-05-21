@@ -83,7 +83,6 @@ const SettingInputLine = ({
 					))}
 				</SettingSelect>
 			)}
-			)}
 		</SettingInputLineWrapper>
 	);
 };
