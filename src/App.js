@@ -44,11 +44,7 @@ export default class App extends Component {
 			average_fitness_evol: 0.0,
 			best_fitness: 0.0,
 			best_fitness_evol: 0.0,
-			best_pid_settings: {
-				k_p: 0,
-				k_i: 0,
-				k_d: 0
-			}
+			fittest_genome: ""
 		};
 		this.geneticEngine = new Genetic();
 		this.simulatorEngine = new SimulatorEngine();
@@ -61,8 +57,30 @@ export default class App extends Component {
 			individualSelectors[this.state.indiv_selector];
 		this.geneticEngine.selectParents =
 			parentsSelectors[this.state.parent_selector];
-		this.geneticEngine.generation = population => {
-			//this.simulatorEngine.reset();
+		this.geneticEngine.generation = (generation, population) => {
+			console.log("pop: ", population);
+
+			const average_fitness =
+				population.map(indiv => indiv.fitness).reduce((a, b) => a + b, 0) /
+				population.length;
+
+			this.setState(pv => ({
+				generation: generation + 1,
+				average_fitness: average_fitness,
+				average_fitness_evol:
+					generation == 0
+						? 0.0
+						: ((population[0].fitness - pv.average_fitness) /
+								pv.average_fitness) *
+						  100,
+				best_fitness: population[0].fitness,
+				best_fitness_evol:
+					generation == 0
+						? 0.0
+						: ((population[0].fitness - pv.best_fitness) / pv.best_fitness) *
+						  100,
+				fittest_genome: population[0].genome
+			}));
 		};
 
 		this.geneticEngine.preFitnessEval = () => {
@@ -158,11 +176,11 @@ export default class App extends Component {
 					<VisPanel>
 						<StatLine>{`Generation: ${this.state.generation}`}</StatLine>
 						<StatLine>{`Average fitness: ${this.state.average_fitness} (${
-							this.state.average_fitness_evol
-						}%)`}</StatLine>
+							this.state.average_fitness_evol > 0 ? "+" : ""
+						}${this.state.average_fitness_evol.toFixed(1)}%)`}</StatLine>
 						<StatLine>{`Best fitness: ${this.state.best_fitness} (${
-							this.state.best_fitness_evol
-						}%)`}</StatLine>
+							this.state.best_fitness_evol > 0 ? "+" : ""
+						}${this.state.best_fitness_evol.toFixed(1)}%)`}</StatLine>
 						<StatLine>{`Fittest genome:`}</StatLine>
 					</VisPanel>
 				</Overlay>

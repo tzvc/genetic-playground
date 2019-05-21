@@ -49,7 +49,7 @@ export default class Genetic {
 		for (let i = 0; i < this.config.population_size; ++i)
 			this.population.push(this.newIndividualFromGenome(this.seed()));
 		// main loop
-		for (let i = 0; i < this.config.iterations && !this.stopFlag; ++i) {
+		for (let gen = 0; gen < this.config.iterations && !this.stopFlag; ++gen) {
 			this.population = this.population.map(async individual => {
 				return {
 					fitness: await this.fitness(individual.genome),
@@ -63,13 +63,8 @@ export default class Genetic {
 				this.optimize(a.fitness, b.fitness) ? -1 : 1
 			);
 
-			console.log(
-				"fittest",
-				this.population[0].fitness,
-				decodeFloatsFromBinaryStr(this.population[0].genome, 3)
-			);
 			// user controlled stop
-			this.generation(this.population);
+			this.generation(gen, this.population);
 
 			// evolve population
 			let newPopulation = [];
