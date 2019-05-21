@@ -18,9 +18,9 @@ import { decodeFloatsFromBinaryStr } from "./utils/string";
 const settings = [
 	{ text: "Population Size", name: "population_size" },
 	{ text: "Mutation rate", name: "mutation_rate" },
-	{ text: "Crossover rate", name: "crossover_rate" }
+	{ text: "Crossover rate", name: "crossover_rate" },
+	{ text: "Random seed", name: "random_seed" }
 ];
-const Options = [{ name: "Tournament" }, { name: "random" }];
 
 export default class App extends Component {
 	constructor(props) {
@@ -32,6 +32,7 @@ export default class App extends Component {
 			population_size: 10,
 			mutation_rate: 0.5,
 			crossover_rate: 0.5,
+			random_seed: "h8cnkRWfbI",
 			// internal
 			simulationRunning: false
 		};
@@ -67,7 +68,7 @@ export default class App extends Component {
 	}
 
 	_runSimulation = () => {
-		seedrandom("SjfejhDBWonfpwhf8w", { global: true });
+		seedrandom(this.state.random_seed, { global: true });
 		this.geneticEngine.run({
 			iterations: 5000,
 			population_size: parseFloat(this.state.population_size),
