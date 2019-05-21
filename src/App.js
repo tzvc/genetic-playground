@@ -8,6 +8,7 @@ import { seed, mutate, crossover } from "./genetic/genetic_config";
 // components
 import SimulatorRenderer from "./simulator/simulator_renderer";
 import Logo from "./components/logo";
+import StatLine from "./components/stat_line";
 import Overlay from "./components/overlay";
 import SettingsPanel from "./components/settings_panel";
 import SettingInputLine from "./components/setting_input";
@@ -36,8 +37,18 @@ export default class App extends Component {
 			mutation_rate: 0.5,
 			crossover_rate: 0.5,
 			random_seed: "h8cnkRWfbI",
-			// internal
-			simulationRunning: false
+			// simulation
+			simulationRunning: false,
+			generation: 0,
+			average_fitness: 0.0,
+			average_fitness_evol: 0.0,
+			best_fitness: 0.0,
+			best_fitness_evol: 0.0,
+			best_pid_settings: {
+				k_p: 0,
+				k_i: 0,
+				k_d: 0
+			}
 		};
 		this.geneticEngine = new Genetic();
 		this.simulatorEngine = new SimulatorEngine();
@@ -144,7 +155,16 @@ export default class App extends Component {
 							{this.state.simulationRunning ? "Stop" : "Run"}
 						</Button>
 					</SettingsPanel>
-					<VisPanel />
+					<VisPanel>
+						<StatLine>{`Generation: ${this.state.generation}`}</StatLine>
+						<StatLine>{`Average fitness: ${this.state.average_fitness} (${
+							this.state.average_fitness_evol
+						}%)`}</StatLine>
+						<StatLine>{`Best fitness: ${this.state.best_fitness} (${
+							this.state.best_fitness_evol
+						}%)`}</StatLine>
+						<StatLine>{`Fittest genome:`}</StatLine>
+					</VisPanel>
 				</Overlay>
 
 				<SimulatorRenderer engine={this.simulatorEngine.engine} />
