@@ -17,8 +17,10 @@ import Button from "./components/button";
 import Author from "./components/author";
 // utils
 import { decodeFloatsFromBinaryStr } from "./utils/string";
+import { increasePerc } from "./utils/math";
 import VisPanel from "./components/vis_panel";
 import GenomeVis from "./components/genome_vis";
+import EvolPercVis from "./components/evol_perc_vis";
 
 const settings = [
 	{ text: "Population Size", name: "population_size" },
@@ -46,7 +48,8 @@ export default class App extends Component {
 			best_fitness: 0.0,
 			best_fitness_evol: 0.0,
 			ex_fittest_genome: "",
-			fittest_genome: ""
+			fittest_genome: "",
+			fittest_params: []
 		};
 		this.geneticEngine = new Genetic();
 		this.simulatorEngine = new SimulatorEngine();
@@ -60,8 +63,6 @@ export default class App extends Component {
 		this.geneticEngine.selectParents =
 			parentsSelectors[this.state.parent_selector];
 		this.geneticEngine.generation = (generation, population) => {
-			console.log("pop: ", population);
-
 			const average_fitness =
 				population.map(indiv => indiv.fitness).reduce((a, b) => a + b, 0) /
 				population.length;
@@ -72,18 +73,16 @@ export default class App extends Component {
 				average_fitness_evol:
 					generation == 0
 						? 0.0
-						: ((population[0].fitness - pv.average_fitness) /
-								pv.average_fitness) *
-						  100,
+						: increasePerc(population[0].fitness, pv.average_fitness),
 				best_fitness: population[0].fitness,
 				best_fitness_evol:
 					generation == 0
 						? 0.0
-						: ((population[0].fitness - pv.best_fitness) / pv.best_fitness) *
-						  100,
+						: increasePerc(population[0].fitness, pv.best_fitness),
 				ex_fittest_genome:
 					generation === 0 ? population[0].genome : pv.fittest_genome,
-				fittest_genome: population[0].genome
+				fittest_genome: population[0].genome,
+				fittest_params: decodeFloatsFromBinaryStr(population[0].genome, 3)
 			}));
 		};
 
@@ -180,17 +179,25 @@ export default class App extends Component {
 					{this.state.simulationRunning && (
 						<VisPanel>
 							<StatLine>{`Generation: ${this.state.generation}`}</StatLine>
-							<StatLine>{`Average fitness: ${this.state.average_fitness} (${
-								this.state.average_fitness_evol > 0 ? "+" : ""
-							}${this.state.average_fitness_evol.toFixed(1)}%)`}</StatLine>
-							<StatLine>{`Best fitness: ${this.state.best_fitness} (${
-								this.state.best_fitness_evol > 0 ? "+" : ""
-							}${this.state.best_fitness_evol.toFixed(1)}%)`}</StatLine>
-							<StatLine>{`Fittest genome:`}</StatLine>
+							<StatLine>
+								{`Average fitness: ${this.state.average_fitness} (`}
+								<EvolPercVis perc={this.state.average_fitness_evol} />)
+							</StatLine>
+							<StatLine>
+								{`Best fitness: ${this.state.best_fitness} (`}
+								<EvolPercVis perc={this.state.best_fitness_evol} />)
+							</StatLine>
+							<StatLine>{`Fittest individual genome:`}</StatLine>
 							<GenomeVis
 								exGenome={this.state.ex_fittest_genome}
 								genome={this.state.fittest_genome}
 							/>
+							<StatLine>{`Fittest individual params:`}</StatLine>
+							<StatLine>{`P:${this.state.fittest_params[0].toFixed(
+								3
+							)} I:${this.state.fittest_params[1].toFixed(
+								3
+							)} D:${this.state.fittest_params[2].toFixed(3)}`}</StatLine>
 						</VisPanel>
 					)}
 				</Overlay>

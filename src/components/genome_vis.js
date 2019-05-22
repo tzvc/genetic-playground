@@ -4,7 +4,7 @@ import styled from "styled-components";
 const GenVisContainer = styled.div`
 	width: 15rem;
 	word-wrap: break-word;
-
+	margin-top: 0.5em;
 	font-size: 1em;
 	color: white;
 	font-family: "Source Code Pro", monospace;
@@ -12,7 +12,7 @@ const GenVisContainer = styled.div`
 
 const GenBitChange = styled.span`
 	font-size: 1em;
-	color: red;
+	color: #d21f3c;
 	font-family: "Source Code Pro", monospace;
 `;
 
