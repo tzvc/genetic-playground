@@ -19,7 +19,7 @@ const GenBitChange = styled.span`
 const GenomeVis = ({ exGenome, genome }) => (
 	<GenVisContainer>
 		{Array.from(genome).map((bit, idx) =>
-			bit === exGenome[idx] ? bit : <GenBitChange>{bit}</GenBitChange>
+			bit === exGenome[idx] ? bit : <GenBitChange key={idx}>{bit}</GenBitChange>
 		)}
 	</GenVisContainer>
 );
