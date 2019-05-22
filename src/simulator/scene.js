@@ -79,7 +79,9 @@ export default class Scene {
 	}
 
 	reset() {
-		//Body.setAngle(this.groundWheel, -Math.PI / 2);
+		Composite.allBodies(this.wheel).forEach(body => {
+			Body.setAngle(body, -Math.PI / 2);
+		});
 		this.sineStep = 0;
 		this.rotationFactor = 0;
 	}
