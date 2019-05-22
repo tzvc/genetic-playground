@@ -44,22 +44,17 @@ export default class Scene {
 		this.wheel = Composite.create({ label: "wheel" });
 		this.mainWheel = Bodies.polygon(width / 2, height * 1.3, 100, height / 2, {
 			isStatic: true,
-			friction: 0.5,
+			friction: 0.8,
 			chamfer: 500
 		});
-		this.spike = Bodies.polygon(
-			width / 2 + height / 3,
-			height * 1.3,
-			100,
-			height / 4,
-			{
-				isStatic: true,
-				friction: 0.5
-			}
-		);
-		this.spike2 = Bodies.polygon(width / 2, height * 1.3, 4, height / 1.8, {
+		this.spike = Bodies.polygon(width / 2, height * 1.3, 5, height / 1.8, {
 			isStatic: true,
-			friction: 0.5,
+			friction: 0.8,
+			chamfer: 200
+		});
+		this.spike2 = Bodies.polygon(width / 2, height * 1.3, 4, height / 1.9, {
+			isStatic: true,
+			friction: 0.8,
 			chamfer: 200
 		});
 		Body.setAngle(this.mainWheel, -Math.PI / 2);
@@ -75,14 +70,11 @@ export default class Scene {
 	}
 	rotateRandomly(ts) {
 		const stepSpeed = this.rotationFactor; //Math.sin(this.sineStep) * this.rotationFactor;
-		Composite.rotate(this.wheel, stepSpeed, {
-			x: this.width / 2,
-			y: this.height * 1.3
+
+		Composite.allBodies(this.wheel).map(body => {
+			Body.rotate(body, stepSpeed);
+			Body.setAngularVelocity(body, stepSpeed);
 		});
-		// Composite.allBodies(this.wheel).map(body => {
-		// 	Body.rotate(body, stepSpeed);
-		// 	//Body.setAngularVelocity(body, stepSpeed);
-		// });
 		//Composite.rotate(this.wheel, stepSpeed);
 		//Body.setAngularVelocity(this.groundWheel, stepSpeed);
 		this.sineStep += 0.023;
