@@ -71,12 +71,12 @@ export default class App extends Component {
 				generation: generation + 1,
 				average_fitness: average_fitness,
 				average_fitness_evol:
-					generation == 0
+					generation === 0
 						? 0.0
 						: increasePerc(population[0].fitness, pv.average_fitness),
 				best_fitness: population[0].fitness,
 				best_fitness_evol:
-					generation == 0
+					generation === 0
 						? 0.0
 						: increasePerc(population[0].fitness, pv.best_fitness),
 				ex_fittest_genome:

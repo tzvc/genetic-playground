@@ -71,7 +71,7 @@ export default class Scene {
 	rotateRandomly(ts) {
 		const stepSpeed = this.rotationFactor; //Math.sin(this.sineStep) * this.rotationFactor;
 
-		Composite.allBodies(this.wheel).map(body => {
+		Composite.allBodies(this.wheel).forEach(body => {
 			Body.rotate(body, stepSpeed);
 			Body.setAngularVelocity(body, stepSpeed);
 		});
