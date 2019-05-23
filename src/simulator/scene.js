@@ -80,7 +80,7 @@ export default class Scene {
 	rotateRandomly(ts) {
 		//const stepSpeed = bezier(this.rotationFactor, 0.41, 0.01, 0.14, 0.98) / 100; //this.rotationFactor;
 		this.rotationStep += this.rotationFactor;
-		console.log(this.rotationFactor);
+		//console.log(this.rotationFactor);
 		//console.log(bezier(this.rotationFactor, 0.25, 0.46, 0.45, 0.94));
 		Composite.allBodies(this.wheel).forEach(body => {
 			Body.rotate(body, this.rotationStep);

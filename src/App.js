@@ -50,7 +50,8 @@ export default class App extends Component {
 			best_fitness_evol: 0.0,
 			ex_fittest_genome: "",
 			fittest_genome: "",
-			fittest_params: []
+			fittest_params: [],
+			best_fitness_stat: []
 		};
 		this.geneticEngine = new Genetic();
 		this.simulatorEngine = new SimulatorEngine();
@@ -83,7 +84,11 @@ export default class App extends Component {
 				ex_fittest_genome:
 					generation === 0 ? population[0].genome : pv.fittest_genome,
 				fittest_genome: population[0].genome,
-				fittest_params: decodeFloatsFromBinaryStr(population[0].genome, 3)
+				fittest_params: decodeFloatsFromBinaryStr(population[0].genome, 3),
+				best_fitness_stat: [
+					...pv.best_fitness_stat,
+					{ generation: generation, fitness: population[0].fitness }
+				]
 			}));
 		};
 
@@ -124,6 +129,7 @@ export default class App extends Component {
 		this.setState({ [e.target.name]: e.target.value });
 
 	render() {
+		console.log(this.state.best_fitness_stat);
 		return (
 			<>
 				<Overlay>
@@ -199,7 +205,7 @@ export default class App extends Component {
 							)} I:${this.state.fittest_params[1].toFixed(
 								3
 							)} D:${this.state.fittest_params[2].toFixed(3)}`}</StatLine>
-							<StatPlot />
+							<StatPlot best_fitness_data={this.state.best_fitness_stat} />
 						</VisPanel>
 					)}
 				</Overlay>
