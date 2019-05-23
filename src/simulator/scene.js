@@ -35,22 +35,14 @@ export default class Scene {
 		// topWall.render.visible = false;
 		// bottomWall.render.visible = false;
 
-		this.sineStep = 0.0;
-		this.rotationFactor = 0.0;
+		this.rotationStep = 0.0;
+		this.rotationFactor = 0.000015;
 
 		this.walls = Composite.create({ label: "walls" });
 		Composite.add(this.walls, [leftWall, rightWall, topWall, bottomWall]);
 
 		this.wheel = Composite.create({ label: "wheel" });
-		// this.mainWheel = Bodies.polygon(width / 2, height * 1.3, 100, height / 2.2, {
-		// 	isStatic: true,
-		// 	friction: 0.8
-		// });
-		// this.spike = Bodies.polygon(width / 2, height * 1.3, 5, height / 1.6, {
-		// 	isStatic: true,
-		// 	friction: 0.8,
-		// 	chamfer: { radius: 100 }
-		// });
+
 		this.spike2 = Bodies.polygon(width / 2, height * 1.7, 4, height, {
 			isStatic: true,
 			friction: 0.8,
@@ -82,17 +74,18 @@ export default class Scene {
 		Composite.allBodies(this.wheel).forEach(body => {
 			Body.setAngle(body, -Math.PI / 2);
 		});
-		this.sineStep = 0;
-		this.rotationFactor = 0;
+		this.rotationStep = 0.0;
+		this.rotationFactor = 0.000015;
 	}
 	rotateRandomly(ts) {
-		const stepSpeed = this.rotationFactor;
-
+		//const stepSpeed = bezier(this.rotationFactor, 0.41, 0.01, 0.14, 0.98) / 100; //this.rotationFactor;
+		this.rotationStep += this.rotationFactor;
+		console.log(this.rotationFactor);
+		//console.log(bezier(this.rotationFactor, 0.25, 0.46, 0.45, 0.94));
 		Composite.allBodies(this.wheel).forEach(body => {
-			Body.rotate(body, stepSpeed);
-			Body.setAngularVelocity(body, stepSpeed);
+			Body.rotate(body, this.rotationStep);
+			Body.setAngularVelocity(body, this.rotationStep);
 		});
-		this.sineStep += 0.023;
-		this.rotationFactor += 0.00003;
+		if (this.rotationFactor > 0.00000001) this.rotationFactor -= 0.00000001;
 	}
 }
