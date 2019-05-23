@@ -21,6 +21,7 @@ import { increasePerc } from "./utils/math";
 import VisPanel from "./components/vis_panel";
 import GenomeVis from "./components/genome_vis";
 import EvolPercVis from "./components/evol_perc_vis";
+import StatPlot from "./components/stat_plot";
 
 const settings = [
 	{ text: "Population Size", name: "population_size" },
@@ -198,6 +199,7 @@ export default class App extends Component {
 							)} I:${this.state.fittest_params[1].toFixed(
 								3
 							)} D:${this.state.fittest_params[2].toFixed(3)}`}</StatLine>
+							<StatPlot />
 						</VisPanel>
 					)}
 				</Overlay>
