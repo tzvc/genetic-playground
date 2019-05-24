@@ -15,13 +15,13 @@ import SettingInputLine from "./components/setting_input";
 import Divider from "./components/divider";
 import Button from "./components/button";
 import Author from "./components/author";
-// utils
-import { decodeFloatsFromBinaryStr } from "./utils/string";
-import { getLastItem, getFitnessStatPercIncrease } from "./utils/misc";
 import VisPanel from "./components/vis_panel";
 import GenomeVis from "./components/genome_vis";
 import EvolPercVis from "./components/evol_perc_vis";
 import StatPlot from "./components/stat_plot";
+// utils
+import { decodeFloatsFromBinaryStr } from "./utils/string";
+import { getLastItem, getFitnessStatPercIncrease } from "./utils/misc";
 
 const settings = [
 	{ text: "Population Size", name: "population_size" },
