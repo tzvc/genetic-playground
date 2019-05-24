@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 
 const GenVisContainer = styled.div`
-	width: 15rem;
+	width: 300px;
 	word-wrap: break-word;
 	margin-top: 0.5em;
 	font-size: 1em;

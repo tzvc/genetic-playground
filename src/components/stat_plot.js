@@ -2,7 +2,9 @@ import React from "react";
 import styled from "styled-components";
 import { XYPlot, LineSeries, XAxis, YAxis } from "react-vis";
 
-const StatPlotContainer = styled.div``;
+const StatPlotContainer = styled.div`
+	margin-top: 1rem;
+`;
 
 const StatPlot = ({ best_fitness_data, avg_fitness_data }) => (
 	<StatPlotContainer>
