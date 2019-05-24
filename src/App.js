@@ -17,7 +17,7 @@ import Button from "./components/button";
 import Author from "./components/author";
 // utils
 import { decodeFloatsFromBinaryStr } from "./utils/string";
-import { increasePerc } from "./utils/math";
+import { getLastItem, getFitnessStatPercIncrease } from "./utils/misc";
 import VisPanel from "./components/vis_panel";
 import GenomeVis from "./components/genome_vis";
 import EvolPercVis from "./components/evol_perc_vis";
@@ -44,14 +44,11 @@ export default class App extends Component {
 			// simulation
 			simulationRunning: false,
 			generation: 0,
-			average_fitness: 0.0,
-			average_fitness_evol: 0.0,
-			best_fitness: 0.0,
-			best_fitness_evol: 0.0,
 			ex_fittest_genome: "",
 			fittest_genome: "",
 			fittest_params: [],
-			best_fitness_stat: []
+			best_fitness_stat: [],
+			avg_fitness_stat: []
 		};
 		this.geneticEngine = new Genetic();
 		this.simulatorEngine = new SimulatorEngine();
@@ -65,22 +62,8 @@ export default class App extends Component {
 		this.geneticEngine.selectParents =
 			parentsSelectors[this.state.parent_selector];
 		this.geneticEngine.generation = (generation, population) => {
-			const average_fitness =
-				population.map(indiv => indiv.fitness).reduce((a, b) => a + b, 0) /
-				population.length;
-
 			this.setState(pv => ({
 				generation: generation + 1,
-				average_fitness: average_fitness,
-				average_fitness_evol:
-					generation === 0
-						? 0.0
-						: increasePerc(population[0].fitness, pv.average_fitness),
-				best_fitness: population[0].fitness,
-				best_fitness_evol:
-					generation === 0
-						? 0.0
-						: increasePerc(population[0].fitness, pv.best_fitness),
 				ex_fittest_genome:
 					generation === 0 ? population[0].genome : pv.fittest_genome,
 				fittest_genome: population[0].genome,
@@ -88,18 +71,26 @@ export default class App extends Component {
 				best_fitness_stat: [
 					...pv.best_fitness_stat,
 					{ generation: generation, fitness: population[0].fitness }
+				],
+				avg_fitness_stat: [
+					...pv.avg_fitness_stat,
+					{
+						generation: generation,
+						fitness:
+							population
+								.map(indiv => indiv.fitness)
+								.reduce((a, b) => a + b, 0) / population.length
+					}
 				]
 			}));
 		};
 
 		this.geneticEngine.preFitnessEval = () => {
-			//console.log("running simulation");
 			this.simulatorEngine.run();
 		};
 
 		this.geneticEngine.fitness = async entity => {
 			const pidParams = decodeFloatsFromBinaryStr(entity, 3);
-			//console.log("Added vehicle", pidParams);
 			return await this.simulatorEngine.addVehicle(
 				pidParams[0],
 				pidParams[1],
@@ -187,13 +178,29 @@ export default class App extends Component {
 						<VisPanel>
 							<StatLine>{`Generation: ${this.state.generation}`}</StatLine>
 							<StatLine>
-								{`Average fitness: ${this.state.average_fitness} (`}
-								<EvolPercVis perc={this.state.average_fitness_evol} />)
+								{`Average fitness: ${
+									getLastItem(this.state.avg_fitness_stat).fitness
+								} (`}
+								<EvolPercVis
+									perc={getFitnessStatPercIncrease(this.state.avg_fitness_stat)}
+								/>
+								)
 							</StatLine>
 							<StatLine>
-								{`Best fitness: ${this.state.best_fitness} (`}
-								<EvolPercVis perc={this.state.best_fitness_evol} />)
+								{`Best fitness: ${
+									getLastItem(this.state.best_fitness_stat).fitness
+								} (`}
+								<EvolPercVis
+									perc={getFitnessStatPercIncrease(
+										this.state.best_fitness_stat
+									)}
+								/>
+								)
 							</StatLine>
+							<StatPlot
+								best_fitness_data={this.state.best_fitness_stat}
+								avg_fitness_data={this.state.avg_fitness_stat}
+							/>
 							<StatLine>{`Fittest individual genome:`}</StatLine>
 							<GenomeVis
 								exGenome={this.state.ex_fittest_genome}
@@ -205,7 +212,6 @@ export default class App extends Component {
 							)} I:${this.state.fittest_params[1].toFixed(
 								3
 							)} D:${this.state.fittest_params[2].toFixed(3)}`}</StatLine>
-							<StatPlot best_fitness_data={this.state.best_fitness_stat} />
 						</VisPanel>
 					)}
 				</Overlay>
