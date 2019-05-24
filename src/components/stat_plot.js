@@ -1,27 +1,26 @@
 import React from "react";
 import styled from "styled-components";
-import {
-	XYPlot,
-	LineSeries,
-	XAxis,
-	YAxis,
-	HorizontalGridLines,
-	VerticalGridLines
-} from "react-vis";
+import { XYPlot, LineSeries, XAxis, YAxis } from "react-vis";
 
 const StatPlotContainer = styled.div``;
 
-const StatPlot = ({ best_fitness_data }) => (
+const StatPlot = ({ best_fitness_data, avg_fitness_data }) => (
 	<StatPlotContainer>
 		<XYPlot width={300} height={200}>
-			{/* <HorizontalGridLines />
-			<VerticalGridLines /> */}
 			<LineSeries
 				data={best_fitness_data.map(p => ({ x: p.generation, y: p.fitness }))}
 				color="red"
 				curve={null}
 				opacity={1}
 				strokeStyle="solid"
+				strokeWidth="1px"
+			/>
+			<LineSeries
+				data={avg_fitness_data.map(p => ({ x: p.generation, y: p.fitness }))}
+				color="red"
+				curve={null}
+				opacity={0.9}
+				strokeStyle="dashed"
 				strokeWidth="1px"
 			/>
 			<XAxis
