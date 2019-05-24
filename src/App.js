@@ -21,7 +21,11 @@ import EvolPercVis from "./components/evol_perc_vis";
 import StatPlot from "./components/stat_plot";
 // utils
 import { decodeFloatsFromBinaryStr } from "./utils/string";
-import { getLastItem, getFitnessStatPercIncrease } from "./utils/misc";
+import {
+	getLastItem,
+	getFitnessStatPercIncrease,
+	statsToCSVFile
+} from "./utils/misc";
 
 const settings = [
 	{ text: "Population Size", name: "population_size" },
@@ -119,8 +123,31 @@ export default class App extends Component {
 	_handleSettingChange = e =>
 		this.setState({ [e.target.name]: e.target.value });
 
+	_downloadStatsAsCSV = () => {
+		const encodedCSV = statsToCSVFile(
+			this.state.best_fitness_stat,
+			this.state.avg_fitness_stat
+		);
+		console.log(encodedCSV);
+		const exportName = `GP_export_${this.state.indiv_selector}_${
+			this.state.parent_selector
+		}_${this.state.population_size}_${this.state.mutation_rate}_${
+			this.state.crossover_rate
+		}_${this.state.random_seed}_${Date.now()}.csv`;
+
+		// Create a virtual Anchor tag
+		const link = document.createElement("a");
+		link.setAttribute("href", encodedCSV);
+		link.setAttribute("download", exportName);
+		// Append the Anchor tag in the actual web page or application
+		document.body.appendChild(link);
+		// Trigger the click event of the Anchor link
+		link.click();
+		// Remove the Anchor link form the web page or application
+		document.body.removeChild(link);
+	};
+
 	render() {
-		console.log(this.state.best_fitness_stat);
 		return (
 			<>
 				<Overlay>
@@ -212,6 +239,7 @@ export default class App extends Component {
 							)} I:${this.state.fittest_params[1].toFixed(
 								3
 							)} D:${this.state.fittest_params[2].toFixed(3)}`}</StatLine>
+							<Button onClick={this._downloadStatsAsCSV}>Download CSV</Button>
 						</VisPanel>
 					)}
 				</Overlay>
