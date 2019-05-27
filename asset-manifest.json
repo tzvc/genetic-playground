@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/theochampion/genetic-playground/static/css/main.662428a2.chunk.css",
+    "main.js": "/theochampion/genetic-playground/static/js/main.4d2d97bc.chunk.js",
+    "main.js.map": "/theochampion/genetic-playground/static/js/main.4d2d97bc.chunk.js.map",
+    "runtime~main.js": "/theochampion/genetic-playground/static/js/runtime~main.979bd7f2.js",
+    "runtime~main.js.map": "/theochampion/genetic-playground/static/js/runtime~main.979bd7f2.js.map",
+    "static/css/2.5a2f7233.chunk.css": "/theochampion/genetic-playground/static/css/2.5a2f7233.chunk.css",
+    "static/js/2.95beb372.chunk.js": "/theochampion/genetic-playground/static/js/2.95beb372.chunk.js",
+    "static/js/2.95beb372.chunk.js.map": "/theochampion/genetic-playground/static/js/2.95beb372.chunk.js.map",
+    "index.html": "/theochampion/genetic-playground/index.html",
+    "precache-manifest.6375c4a8e674bc6340503916cc3a6d7b.js": "/theochampion/genetic-playground/precache-manifest.6375c4a8e674bc6340503916cc3a6d7b.js",
+    "service-worker.js": "/theochampion/genetic-playground/service-worker.js",
+    "static/css/2.5a2f7233.chunk.css.map": "/theochampion/genetic-playground/static/css/2.5a2f7233.chunk.css.map",
+    "static/css/main.662428a2.chunk.css.map": "/theochampion/genetic-playground/static/css/main.662428a2.chunk.css.map"
+  }
+}
