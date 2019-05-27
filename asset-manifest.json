@@ -1,17 +1,17 @@
 {
   "files": {
-    "main.css": "/theochampion/genetic-playground/static/css/main.662428a2.chunk.css",
-    "main.js": "/theochampion/genetic-playground/static/js/main.4d2d97bc.chunk.js",
-    "main.js.map": "/theochampion/genetic-playground/static/js/main.4d2d97bc.chunk.js.map",
-    "runtime~main.js": "/theochampion/genetic-playground/static/js/runtime~main.979bd7f2.js",
-    "runtime~main.js.map": "/theochampion/genetic-playground/static/js/runtime~main.979bd7f2.js.map",
-    "static/css/2.5a2f7233.chunk.css": "/theochampion/genetic-playground/static/css/2.5a2f7233.chunk.css",
-    "static/js/2.95beb372.chunk.js": "/theochampion/genetic-playground/static/js/2.95beb372.chunk.js",
-    "static/js/2.95beb372.chunk.js.map": "/theochampion/genetic-playground/static/js/2.95beb372.chunk.js.map",
-    "index.html": "/theochampion/genetic-playground/index.html",
-    "precache-manifest.6375c4a8e674bc6340503916cc3a6d7b.js": "/theochampion/genetic-playground/precache-manifest.6375c4a8e674bc6340503916cc3a6d7b.js",
-    "service-worker.js": "/theochampion/genetic-playground/service-worker.js",
-    "static/css/2.5a2f7233.chunk.css.map": "/theochampion/genetic-playground/static/css/2.5a2f7233.chunk.css.map",
-    "static/css/main.662428a2.chunk.css.map": "/theochampion/genetic-playground/static/css/main.662428a2.chunk.css.map"
+    "main.css": "/genetic-playground/static/css/main.662428a2.chunk.css",
+    "main.js": "/genetic-playground/static/js/main.f50f03af.chunk.js",
+    "main.js.map": "/genetic-playground/static/js/main.f50f03af.chunk.js.map",
+    "runtime~main.js": "/genetic-playground/static/js/runtime~main.56c3186a.js",
+    "runtime~main.js.map": "/genetic-playground/static/js/runtime~main.56c3186a.js.map",
+    "static/css/2.5a2f7233.chunk.css": "/genetic-playground/static/css/2.5a2f7233.chunk.css",
+    "static/js/2.368611d0.chunk.js": "/genetic-playground/static/js/2.368611d0.chunk.js",
+    "static/js/2.368611d0.chunk.js.map": "/genetic-playground/static/js/2.368611d0.chunk.js.map",
+    "index.html": "/genetic-playground/index.html",
+    "precache-manifest.745ca4230997fe1bf4a6bdc00048dbca.js": "/genetic-playground/precache-manifest.745ca4230997fe1bf4a6bdc00048dbca.js",
+    "service-worker.js": "/genetic-playground/service-worker.js",
+    "static/css/2.5a2f7233.chunk.css.map": "/genetic-playground/static/css/2.5a2f7233.chunk.css.map",
+    "static/css/main.662428a2.chunk.css.map": "/genetic-playground/static/css/main.662428a2.chunk.css.map"
   }
 }
