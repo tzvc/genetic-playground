@@ -1,5 +1,6 @@
 {
-	"name": "genetic-pid-controller",
+	"name": "genetic-playground",
+	"homepage": "https://github.com/theochampion/genetic-playground",
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
