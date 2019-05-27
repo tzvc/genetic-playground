@@ -46,7 +46,7 @@ export default class Scene {
 		this.spike2 = Bodies.polygon(width / 2, height * 1.7, 4, height, {
 			isStatic: true,
 			friction: 0.8,
-			chamfer: { radius: 50 }
+			chamfer: { radius: 70 }
 		});
 		this.spike3 = Bodies.polygon(width / 2, height * 1.7, 6, height, {
 			isStatic: true,
