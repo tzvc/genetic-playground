@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import seedrandom from "seedrandom";
-// engines
+// simulator
 import SimulatorEngine from "./simulator/simulator_engine";
+// genetic
 import Genetic, { optimizers } from "./genetic/genetic";
 import { individualSelectors, parentsSelectors } from "./genetic/selectors";
 import { seed, mutate, crossover } from "./genetic/genetic_config";
@@ -34,6 +35,8 @@ const settings = [
 	{ text: "Random seed", name: "random_seed" }
 ];
 
+const default_seed = "h8cnkRWfbI";
+
 export default class App extends Component {
 	constructor(props) {
 		super(props);
@@ -44,7 +47,7 @@ export default class App extends Component {
 			population_size: 10,
 			mutation_rate: 0.5,
 			crossover_rate: 0.5,
-			random_seed: "h8cnkRWfbI",
+			random_seed: default_seed,
 			// simulation
 			simulationRunning: false,
 			generation: 0,
@@ -128,22 +131,17 @@ export default class App extends Component {
 			this.state.best_fitness_stat,
 			this.state.avg_fitness_stat
 		);
-		console.log(encodedCSV);
 		const exportName = `GP_export_${this.state.indiv_selector}_${
 			this.state.parent_selector
 		}_${this.state.population_size}_${this.state.mutation_rate}_${
 			this.state.crossover_rate
 		}_${this.state.random_seed}_${Date.now()}.csv`;
 
-		// Create a virtual Anchor tag
 		const link = document.createElement("a");
 		link.setAttribute("href", encodedCSV);
 		link.setAttribute("download", exportName);
-		// Append the Anchor tag in the actual web page or application
 		document.body.appendChild(link);
-		// Trigger the click event of the Anchor link
 		link.click();
-		// Remove the Anchor link form the web page or application
 		document.body.removeChild(link);
 	};
 
