@@ -47,7 +47,6 @@ export default class SimulatorEngine {
 
 	stop() {
 		// resolve all running vehicles
-		console.log("stopping simulation...");
 		this.vehicles.forEach(vehicle => vehicle.resolver(vehicle.stepCount));
 	}
 
@@ -73,13 +72,8 @@ export default class SimulatorEngine {
 		this.vehicles.push(vehicle);
 
 		const stepCount = await resPromise;
-		//console.log("deleting vehicle");
 		Composite.remove(this.engine.world, vehicle.obj.composite);
-		this.vehicles = this.vehicles.filter(item => {
-			//console.log(item, vehicle);
-			return item !== vehicle;
-		});
-		//console.log(this.vehicles);
+		this.vehicles = this.vehicles.filter(item => item !== vehicle);
 		return stepCount;
 	}
 
