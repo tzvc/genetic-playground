@@ -188,7 +188,6 @@ export default class App extends Component {
 								onChange={this._handleSettingChange}
 							/>
 						))}
-						<Divider />
 						<Button
 							onClick={
 								this.state.simulationRunning
