@@ -25,6 +25,9 @@ const GitHubLogoWrapper = styled.a`
 	height: 1.7rem;
 	margin-left: 1rem;
 	align-self: flex-end;
+	&:hover {
+		opacity: 0.8;
+	}
 `;
 const GitHubLogoSvg = styled.svg`
 	height: 1.7rem;

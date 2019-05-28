@@ -202,18 +202,18 @@ export default class App extends Component {
 						<VisPanel>
 							<StatLine>{`Generation: ${this.state.generation}`}</StatLine>
 							<StatLine>
-								{`Average fitness: ${
-									getLastItem(this.state.avg_fitness_stat).fitness
-								} (`}
+								{`Average fitness: ${getLastItem(
+									this.state.avg_fitness_stat
+								).fitness.toFixed(2)} (`}
 								<EvolPercVis
 									perc={getFitnessStatPercIncrease(this.state.avg_fitness_stat)}
 								/>
 								)
 							</StatLine>
 							<StatLine>
-								{`Best fitness: ${
-									getLastItem(this.state.best_fitness_stat).fitness
-								} (`}
+								{`Best fitness: ${getLastItem(
+									this.state.best_fitness_stat
+								).fitness.toFixed(2)} (`}
 								<EvolPercVis
 									perc={getFitnessStatPercIncrease(
 										this.state.best_fitness_stat
