@@ -17,7 +17,7 @@ import Divider from "./components/divider";
 import Button from "./components/button";
 import Author from "./components/author";
 import VisPanel from "./components/vis_panel";
-import GenomeVis from "./components/genome_vis";
+import GenomeEvolutionVis from "./components/genome_vis";
 import EvolPercVis from "./components/evol_perc_vis";
 import StatPlot from "./components/stat_plot";
 // utils
@@ -52,10 +52,7 @@ export default class App extends Component {
 			// simulation
 			simulationRunning: false,
 			generation: 0,
-			ex_fittest_genome: "",
-			fittest_genome: "",
 			best_genomes: [],
-			fittest_params: [],
 			best_fitness_stat: [],
 			avg_fitness_stat: []
 		};
@@ -74,10 +71,6 @@ export default class App extends Component {
 		this.geneticEngine.generation = (generation, population) => {
 			this.setState(pv => ({
 				generation: generation + 1,
-				ex_fittest_genome:
-					generation === 0 ? population[0].genome : pv.fittest_genome,
-				fittest_genome: population[0].genome,
-				fittest_params: decodeFloatsFromBinaryStr(population[0].genome, 3),
 				best_genomes: [...pv.best_genomes, population[0].genome],
 				best_fitness_stat: [
 					...pv.best_fitness_stat,
@@ -107,7 +100,11 @@ export default class App extends Component {
 	}
 
 	_runSimulation = () => {
-		this.setState({ avg_fitness_stat: [], best_fitness_stat: [] });
+		this.setState({
+			avg_fitness_stat: [],
+			best_fitness_stat: [],
+			best_genomes: []
+		});
 		seedrandom(this.state.random_seed, { global: true });
 		this.geneticEngine.run({
 			iterations: 5000,
@@ -232,17 +229,7 @@ export default class App extends Component {
 							/>
 							{!this.isMobile ? (
 								<>
-									<StatLine>{`Fittest individual genome:`}</StatLine>
-									<GenomeVis
-										exGenome={this.state.ex_fittest_genome}
-										genome={this.state.fittest_genome}
-									/>
-									<StatLine>{`Fittest individual params:`}</StatLine>
-									<StatLine>{`P:${this.state.fittest_params[0].toFixed(
-										3
-									)} I:${this.state.fittest_params[1].toFixed(
-										3
-									)} D:${this.state.fittest_params[2].toFixed(3)}`}</StatLine>
+									<GenomeEvolutionVis genomes={this.state.best_genomes} />
 									<Button onClick={this._downloadStatsAsCSV}>
 										Download CSV
 									</Button>
