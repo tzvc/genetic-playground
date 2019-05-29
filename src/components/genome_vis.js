@@ -25,12 +25,15 @@ const change_color_lookup = ["#df2644", "#e96a7f", "#f19dab", "#fff"];
 const GenomeEvolutionVis = ({ genomes }) => {
 	const [current_genome] = genomes.slice(-1);
 	const genome_history = genomes.slice(-4, -1).reverse();
+	const current_params = decodeFloatsFromBinaryStr(current_genome, 3);
 	const params_history = genome_history.map(genome =>
 		decodeFloatsFromBinaryStr(genome, 3)
 	);
 	return (
 		<>
-			<StatLine>Fittest individual genome:</StatLine>
+			<StatLine>Fittest individual:</StatLine>
+			<StatLine>genome:</StatLine>
+
 			<GenVisContainer>
 				{Array.from(current_genome).map((bit, bit_idx) => {
 					let lastChange = change_color_lookup.length - 1;
@@ -46,10 +49,27 @@ const GenomeEvolutionVis = ({ genomes }) => {
 					);
 				})}
 			</GenVisContainer>
-			<StatLine>{`Fittest individual params:`}</StatLine>
-			{/* <StatLine>{`k_p:${p_gain.toFixed(3)} k_i:${i_gain.toFixed(
-				3
-			)} k_d:${d_gain.toFixed(3)}`}</StatLine> */}
+			<StatLine>
+				&nbsp;p_gain:&nbsp;&nbsp;&nbsp;&nbsp;i_gain:&nbsp;&nbsp;&nbsp;&nbsp;d_gain:
+			</StatLine>
+			<StatLine>
+				{current_params.map((param, param_idx) => {
+					let lastChange = change_color_lookup.length - 1;
+					for (const [ex_p_idx, ex_param] of params_history.entries())
+						if (ex_param[param_idx] !== param) {
+							lastChange = ex_p_idx;
+							break;
+						}
+					return (
+						<GenBitChange
+							key={param_idx}
+							color={change_color_lookup[lastChange]}
+						>
+							{`${param.toFixed(7)}`}&nbsp;&nbsp;
+						</GenBitChange>
+					);
+				})}
+			</StatLine>
 		</>
 	);
 };
