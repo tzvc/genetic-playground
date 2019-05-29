@@ -40,6 +40,7 @@ const default_seed = "h8cnkRWfbI";
 export default class App extends Component {
 	constructor(props) {
 		super(props);
+		this.isMobile = window.innerWidth <= 700;
 		this.state = {
 			// settings
 			indiv_selector: "tournament3",
@@ -152,55 +153,57 @@ export default class App extends Component {
 		return (
 			<>
 				<Overlay>
-					<SettingsPanel>
-						<Logo />
-						<Author />
-						<Divider />
-						<SettingInputLine
-							text="Indiv selector"
-							name="indiv_selector"
-							value={this.state.indiv_selector}
-							options={Object.keys(individualSelectors)}
-							disabled={this.state.simulationRunning}
-							onChange={e => {
-								this.geneticEngine.selectIndividual =
-									individualSelectors[e.target.value];
-								this._handleSettingChange(e);
-							}}
-						/>
-						<SettingInputLine
-							text="Parent selector"
-							name="parent_selector"
-							value={this.state.parent_selector}
-							options={Object.keys(parentsSelectors)}
-							disabled={this.state.simulationRunning}
-							onChange={e => {
-								this.geneticEngine.selectParents =
-									parentsSelectors[e.target.value];
-								this._handleSettingChange(e);
-							}}
-						/>
-						<Divider />
-						{settings.map(({ text, name }) => (
+					{(!this.isMobile || !this.state.simulationRunning) && (
+						<SettingsPanel>
+							<Logo />
+							<Author />
+							<Divider />
 							<SettingInputLine
-								key={name}
-								text={text}
-								name={name}
-								value={this.state[name]}
+								text="Indiv selector"
+								name="indiv_selector"
+								value={this.state.indiv_selector}
+								options={Object.keys(individualSelectors)}
 								disabled={this.state.simulationRunning}
-								onChange={this._handleSettingChange}
+								onChange={e => {
+									this.geneticEngine.selectIndividual =
+										individualSelectors[e.target.value];
+									this._handleSettingChange(e);
+								}}
 							/>
-						))}
-						<Button
-							onClick={
-								this.state.simulationRunning
-									? this._stopSimulation
-									: this._runSimulation
-							}
-						>
-							{this.state.simulationRunning ? "Stop" : "Run"}
-						</Button>
-					</SettingsPanel>
+							<SettingInputLine
+								text="Parent selector"
+								name="parent_selector"
+								value={this.state.parent_selector}
+								options={Object.keys(parentsSelectors)}
+								disabled={this.state.simulationRunning}
+								onChange={e => {
+									this.geneticEngine.selectParents =
+										parentsSelectors[e.target.value];
+									this._handleSettingChange(e);
+								}}
+							/>
+							<Divider />
+							{settings.map(({ text, name }) => (
+								<SettingInputLine
+									key={name}
+									text={text}
+									name={name}
+									value={this.state[name]}
+									disabled={this.state.simulationRunning}
+									onChange={this._handleSettingChange}
+								/>
+							))}
+							<Button
+								onClick={
+									this.state.simulationRunning
+										? this._stopSimulation
+										: this._runSimulation
+								}
+							>
+								{this.state.simulationRunning ? "Stop" : "Run"}
+							</Button>
+						</SettingsPanel>
+					)}
 					{this.state.simulationRunning && (
 						<VisPanel>
 							<StatLine>{`Generation: ${this.state.generation}`}</StatLine>
@@ -228,18 +231,34 @@ export default class App extends Component {
 								best_fitness_data={this.state.best_fitness_stat}
 								avg_fitness_data={this.state.avg_fitness_stat}
 							/>
-							<StatLine>{`Fittest individual genome:`}</StatLine>
-							<GenomeVis
-								exGenome={this.state.ex_fittest_genome}
-								genome={this.state.fittest_genome}
-							/>
-							<StatLine>{`Fittest individual params:`}</StatLine>
-							<StatLine>{`P:${this.state.fittest_params[0].toFixed(
-								3
-							)} I:${this.state.fittest_params[1].toFixed(
-								3
-							)} D:${this.state.fittest_params[2].toFixed(3)}`}</StatLine>
-							<Button onClick={this._downloadStatsAsCSV}>Download CSV</Button>
+							{!this.isMobile ? (
+								<>
+									<StatLine>{`Fittest individual genome:`}</StatLine>
+									<GenomeVis
+										exGenome={this.state.ex_fittest_genome}
+										genome={this.state.fittest_genome}
+									/>
+									<StatLine>{`Fittest individual params:`}</StatLine>
+									<StatLine>{`P:${this.state.fittest_params[0].toFixed(
+										3
+									)} I:${this.state.fittest_params[1].toFixed(
+										3
+									)} D:${this.state.fittest_params[2].toFixed(3)}`}</StatLine>
+									<Button onClick={this._downloadStatsAsCSV}>
+										Download CSV
+									</Button>
+								</>
+							) : (
+								<Button
+									onClick={
+										this.state.simulationRunning
+											? this._stopSimulation
+											: this._runSimulation
+									}
+								>
+									{this.state.simulationRunning ? "Stop" : "Run"}
+								</Button>
+							)}
 						</VisPanel>
 					)}
 				</Overlay>
