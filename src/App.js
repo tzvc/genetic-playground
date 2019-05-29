@@ -53,6 +53,7 @@ export default class App extends Component {
 			generation: 0,
 			ex_fittest_genome: "",
 			fittest_genome: "",
+			best_genomes: [],
 			fittest_params: [],
 			best_fitness_stat: [],
 			avg_fitness_stat: []
@@ -68,6 +69,7 @@ export default class App extends Component {
 			individualSelectors[this.state.indiv_selector];
 		this.geneticEngine.selectParents =
 			parentsSelectors[this.state.parent_selector];
+
 		this.geneticEngine.generation = (generation, population) => {
 			this.setState(pv => ({
 				generation: generation + 1,
@@ -75,6 +77,7 @@ export default class App extends Component {
 					generation === 0 ? population[0].genome : pv.fittest_genome,
 				fittest_genome: population[0].genome,
 				fittest_params: decodeFloatsFromBinaryStr(population[0].genome, 3),
+				best_genomes: [...pv.best_genomes, population[0].genome],
 				best_fitness_stat: [
 					...pv.best_fitness_stat,
 					{ generation: generation, fitness: population[0].fitness }
@@ -97,16 +100,13 @@ export default class App extends Component {
 		};
 
 		this.geneticEngine.fitness = async entity => {
-			const pidParams = decodeFloatsFromBinaryStr(entity, 3);
-			return await this.simulatorEngine.addVehicle(
-				pidParams[0],
-				pidParams[1],
-				pidParams[2]
-			);
+			const [p_gain, i_gain, d_gain] = decodeFloatsFromBinaryStr(entity, 3);
+			return await this.simulatorEngine.addVehicle(p_gain, i_gain, d_gain);
 		};
 	}
 
 	_runSimulation = () => {
+		this.setState({ avg_fitness_stat: [], best_fitness_stat: [] });
 		seedrandom(this.state.random_seed, { global: true });
 		this.geneticEngine.run({
 			iterations: 5000,
@@ -114,7 +114,9 @@ export default class App extends Component {
 			mutation_rate: parseFloat(this.state.mutation_rate),
 			crossover_rate: parseFloat(this.state.crossover_rate)
 		});
-		this.setState({ simulationRunning: true });
+		this.setState({
+			simulationRunning: true
+		});
 	};
 
 	_stopSimulation = () => {
@@ -146,6 +148,7 @@ export default class App extends Component {
 	};
 
 	render() {
+		console.log("render");
 		return (
 			<>
 				<Overlay>
