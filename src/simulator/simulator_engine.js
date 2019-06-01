@@ -1,4 +1,4 @@
-import { Engine, Events, World, Composite } from "matter-js";
+import { Engine, Runner, Events, World, Composite } from "matter-js";
 import PIDController from "./pid_controller";
 
 // objects
@@ -38,7 +38,9 @@ export default class SimulatorEngine {
 
 		this.scene = new Scene(this.simulationWidth, this.simulationHeight);
 		World.add(this.engine.world, [this.scene.composite]);
-		Engine.run(this.engine);
+		this.runner = Runner.create({ isFixed: true });
+		Runner.run(this.runner, this.engine);
+		console.log(this.runner.isFixed);
 	}
 
 	reset() {
@@ -78,9 +80,11 @@ export default class SimulatorEngine {
 	}
 
 	run() {
+		this.runner.enabled = false;
 		this.scene.reset();
 		this.vehicles.forEach(vehicle => {
 			World.add(this.engine.world, [vehicle.obj.composite]);
 		});
+		this.runner.enabled = true;
 	}
 }
