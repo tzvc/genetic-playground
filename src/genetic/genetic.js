@@ -6,9 +6,9 @@ export const optimizers = {
 };
 
 const defaultConfig = {
-	iterations: 5000,
-	population_size: 10,
-	mutation_rate: 0.6,
+	iterations: Infinity,
+	population_size: 100,
+	mutation_rate: 0.03,
 	crossover_rate: 0.6,
 	fittestAlwaysSurvive: true
 };
@@ -71,7 +71,7 @@ export default class Genetic {
 			// evolve population
 			let newPopulation = [];
 
-			// if option specified, keep fittest individual
+			// if option specified, keep fittest individual (elitism)
 			if (this.config.fittestAlwaysSurvive)
 				newPopulation.push(this.population[0]);
 

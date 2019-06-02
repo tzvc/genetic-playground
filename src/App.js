@@ -96,8 +96,8 @@ export default class App extends Component {
 		 * Result will be returned uppon vehicle destruction in the simulation
 		 * engine.
 		 */
-		this.geneticEngine.fitness = async entity => {
-			const [p_gain, i_gain, d_gain] = decodeFloatsFromBinaryStr(entity, 3);
+		this.geneticEngine.fitness = async chromosome => {
+			const [p_gain, i_gain, d_gain] = decodeFloatsFromBinaryStr(chromosome, 3);
 			return await this.simulatorEngine.addVehicle(p_gain, i_gain, d_gain);
 		};
 
