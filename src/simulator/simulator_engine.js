@@ -29,7 +29,7 @@ export default class SimulatorEngine {
 		Events.on(this.engine, "beforeUpdate", event => {
 			this.scene.rotateRandomly();
 			this.vehicles.forEach(vehicle => {
-				vehicle.stepCount += 1;
+				vehicle.stepCount += 1 - Math.abs(vehicle.obj.getBodyAngle());
 				vehicle.obj.setWheelAngularVelocity(
 					vehicle.controller.update(vehicle.obj.getBodyAngle())
 				);
