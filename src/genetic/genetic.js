@@ -85,7 +85,11 @@ export default class Genetic {
 					const parents = this.selectParents(this.population, this.optimize);
 					const childrens = this.crossover(parents[0], parents[1]);
 					newPopulation.concat(
-						childrens.map(children => this.newIndividualFromGenome(children))
+						childrens.map(children => {
+							if (this.shouldApplyFromRate(this.config.mutation_rate))
+								children = this.mutate(children);
+							return this.newIndividualFromGenome(children);
+						})
 					);
 				} else {
 					let indiv = this.selectIndividual(this.population, this.optimize);
