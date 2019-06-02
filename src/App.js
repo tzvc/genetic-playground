@@ -89,13 +89,23 @@ export default class App extends Component {
 			}));
 		};
 
-		this.geneticEngine.preFitnessEval = () => {
-			this.simulatorEngine.run();
-		};
-
+		/**
+		 * Evaluate fitness by adding vehicle to the simulation
+		 * with the PID parameters decoded from the individual's chromosome.
+		 * Simulation will start when all vehicles are ready (preFitnessEval).
+		 * Result will be returned uppon vehicle destruction in the simulation
+		 * engine.
+		 */
 		this.geneticEngine.fitness = async entity => {
 			const [p_gain, i_gain, d_gain] = decodeFloatsFromBinaryStr(entity, 3);
 			return await this.simulatorEngine.addVehicle(p_gain, i_gain, d_gain);
+		};
+
+		/**
+		 * Launch simulation when all vehicle has been added to compute fitness.
+		 */
+		this.geneticEngine.preFitnessEval = () => {
+			this.simulatorEngine.run();
 		};
 	}
 
