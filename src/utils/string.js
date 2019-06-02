@@ -19,3 +19,12 @@ export const decodeFloatsFromBinaryStr = (binStr, floatNb) => {
 		);
 	return decoded;
 };
+
+export const hashCode = str =>
+	str
+		.split("")
+		.reduce(
+			(prevHash, currVal) =>
+				((prevHash << 5) - prevHash + currVal.charCodeAt(0)) | 0,
+			0
+		);
