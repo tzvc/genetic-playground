@@ -1,14 +1,15 @@
 ### Genetic playground
 
 A Javascript web application to explore and experiment with evolutionnary computation principles.
+Developed by theo champion as part of the evolutionary computing course at RMIT university.
 
 ### Genetic configuration parameters
 
 | Name            | Default | Range/Type  | Description                                         |
 | --------------- | ------- | ----------- | --------------------------------------------------- |
 | Population Size | 10      | Real Number | Size of the population                              |
-| Crossover Rate  | 0.9     | [0.0, 1.0]  | Probability of crossover operation (single point)   |
-| Mutation Rate   | 0.2     | [0.0, 1.0]  | Probability of mutation operation (random bit flip) |
+| Crossover Rate  | 0.9     | [0.0, 1.0]  | Probability of crossover operation (multi point)    |
+| Mutation Rate   | 0.2     | [0.0, 1.0]  | Probability of mutation operation (safe random bit flip) |
 
 ### Selection operators
 
