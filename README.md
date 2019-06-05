@@ -3,8 +3,8 @@
 A Javascript web application to explore and experiment with evolutionnary computation principles.
 Developed by theo champion as part of the evolutionary computing course at RMIT university.
 
-Source code available at https://github.com/theochampion/genetic-playground
-Demo avaialable at https://theochampion.github.io/genetic-playground/
+- Source code available at https://github.com/theochampion/genetic-playground
+- Demo available at https://theochampion.github.io/genetic-playground/
 
 ### Genetic configuration parameters
 
