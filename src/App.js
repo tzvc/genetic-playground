@@ -35,7 +35,7 @@ const settings = [
 	{ text: "Random seed", name: "random_seed" }
 ];
 
-const default_seed = "h8cnkRWfbI";
+const default_seed = "$qW8#@";
 
 export default class App extends Component {
 	constructor(props) {
@@ -45,9 +45,9 @@ export default class App extends Component {
 			// settings
 			indiv_selector: "tournament3",
 			parent_selector: "tournament3",
-			population_size: 10,
-			mutation_rate: 0.5,
-			crossover_rate: 0.5,
+			population_size: 100,
+			mutation_rate: 0.1,
+			crossover_rate: 0.6,
 			random_seed: default_seed,
 			// simulation
 			simulationRunning: false,

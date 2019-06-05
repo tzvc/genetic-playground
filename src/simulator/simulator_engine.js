@@ -40,7 +40,6 @@ export default class SimulatorEngine {
 		World.add(this.engine.world, [this.scene.composite]);
 		this.runner = Runner.create({ isFixed: true });
 		Runner.run(this.runner, this.engine);
-		console.log(this.runner.isFixed);
 	}
 
 	reset() {
