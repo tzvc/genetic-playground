@@ -1,18 +1,21 @@
 ### Genetic playground
 
-A Javascript web application to explore and experiment with evolutionnary computation principles.
-Developed by theo champion as part of the evolutionary computing course at RMIT university.
+A Javascript web application to explore and experiment with evolutionary computation principles.
+
+Simulation is comprised of a population of robots with a single wheel whose rotation speed and direction are controlled by a standard PID controller. Parameters for this controller is to be optimized over generations by the genetic algorithm in order to ensure their survival in a challenging environment (bumpy wheel with increasing rotation speed).
+
+Developed by @theo_champion as part of the evolutionary computing course at RMIT university.
 
 - Source code available at https://github.com/theochampion/genetic-playground
 - Demo available at https://theochampion.github.io/genetic-playground/
 
 ### Genetic configuration parameters
 
-| Name            | Default | Range/Type  | Description                                         |
-| --------------- | ------- | ----------- | --------------------------------------------------- |
-| Population Size | 10      | Real Number | Size of the population                              |
-| Crossover Rate  | 0.9     | [0.0, 1.0]  | Probability of crossover operation (multi point)    |
-| Mutation Rate   | 0.2     | [0.0, 1.0]  | Probability of mutation operation (safe random bit flip) |
+| Name            | Default | Range/Type  | Description                                              |
+| --------------- | ------- | ----------- | -------------------------------------------------------- |
+| Population Size | 100     | Real Number | Size of the population                                   |
+| Crossover Rate  | 0.6     | [0.0, 1.0]  | Probability of crossover operation (multi point)         |
+| Mutation Rate   | 0.1     | [0.0, 1.0]  | Probability of mutation operation (safe random bit flip) |
 
 ### Selection operators
 
