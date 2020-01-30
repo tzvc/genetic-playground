@@ -4,10 +4,11 @@ A Javascript web application to explore and experiment with evolutionary computa
 
 Simulation is comprised of a population of robots with a single wheel whose rotation speed and direction are controlled by a standard PID controller. Parameters for this controller is to be optimized over generations by the genetic algorithm in order to ensure their survival in a challenging environment (bumpy wheel with increasing rotation speed).
 
-Developed by @theo_champion as part of the evolutionary computing course at RMIT university.
+Developed by [@theo_champion](https://github.com/theochampion) as part of the evolutionary computing course at RMIT university.
 
 - Source code available at https://github.com/theochampion/genetic-playground
 - Demo available at https://theochampion.github.io/genetic-playground/
+- Report paper available at https://github.com/theochampion/genetic-playground/blob/master/rmit_report_paper_theo.pdf
 
 ### Genetic configuration parameters
 
